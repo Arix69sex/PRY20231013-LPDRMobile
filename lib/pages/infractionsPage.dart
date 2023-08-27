@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:lpdr_mobile/components/sideBar.dart';
 import 'package:lpdr_mobile/components/topbar.dart';
 
-class HomePage extends StatefulWidget {
+class InfractionsPage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _InfractionsPageState createState() => _InfractionsPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _InfractionsPageState extends State<InfractionsPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void openDrawer() {
@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: TopBar(
-          title: 'Home',
+          title: 'Infractions',
           onMenuPressed: openDrawer,
         ),
       ),
