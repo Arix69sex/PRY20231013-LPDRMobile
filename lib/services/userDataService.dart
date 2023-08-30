@@ -4,6 +4,7 @@ import 'package:http/http.dart';
 import 'package:lpdr_mobile/util/HttpRequest.dart';
 
 class UserDataService {
+  
   // Constructor
   UserDataService();
 
@@ -39,15 +40,13 @@ class UserDataService {
     }
   }
 
-  Future<Response?> getUserDataByUserId(String userId) async {
+  Future<Response?> getUserDataByUserId(int userId) async {
     var response;
     try {
       var baseurl = dotenv.env["API_URL"];
-      print(baseurl);
-      var httpRequest = new HttpRequest();
+      var httpRequest = HttpRequest();
 
-      response = await httpRequest.get('${baseurl}usersData/user/${userId}');
-
+      response = await httpRequest.get('${baseurl}usersData/${userId}/data');
       return response;
     } catch (error) {
       print(error);
@@ -75,7 +74,8 @@ class UserDataService {
         "phoneNumber": phoneNumber
       };
 
-      response = await httpRequest.post('${baseurl}usersData/${userId}/create', body);
+      response =
+          await httpRequest.post('${baseurl}usersData/${userId}/create', body);
 
       return response;
     } catch (error) {
@@ -85,7 +85,7 @@ class UserDataService {
   }
 
   Future<Response?> updateUserDataById(
-      String userDataId,
+      int userDataId,
       String? identification,
       String? names,
       String? lastNames,

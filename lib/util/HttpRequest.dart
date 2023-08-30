@@ -8,13 +8,14 @@ class HttpRequest {
       : contentTypeHeader = contentTypeHeader ??
             {
               "Content-Type": 'application/json',
-            } {
-    Jwt.getToken().then((jwt) => {
-          if (jwt != null) {contentTypeHeader?['Authorization'] = 'Bearer $jwt'}
-        });
-  }
+            } {}
 
   Future<http.Response> post(String url, dynamic body) async {
+    var jwt = await Jwt.getToken();
+    if (jwt != null) {
+      jwt = jwt.substring(1, jwt.length - 1);
+      contentTypeHeader['Authorization'] = 'Bearer $jwt';
+    }
     final response = await http.post(
       Uri.parse(url),
       headers: contentTypeHeader,
@@ -24,6 +25,11 @@ class HttpRequest {
   }
 
   Future<http.Response> get(String url) async {
+    var jwt = await Jwt.getToken();
+    if (jwt != null) {
+      jwt = jwt.substring(1, jwt.length - 1);
+      contentTypeHeader['Authorization'] = 'Bearer $jwt';
+    }
     final response = await http.get(
       Uri.parse(url),
       headers: contentTypeHeader,
@@ -32,6 +38,12 @@ class HttpRequest {
   }
 
   Future<http.Response> patch(String url, dynamic body) async {
+    var jwt = await Jwt.getToken();
+    if (jwt != null) {
+      jwt = jwt.substring(1, jwt.length - 1);
+      contentTypeHeader['Authorization'] = 'Bearer $jwt';
+    }
+
     final response = await http.patch(
       Uri.parse(url),
       headers: contentTypeHeader,
@@ -41,6 +53,12 @@ class HttpRequest {
   }
 
   Future<http.Response> delete(String url) async {
+    var jwt = await Jwt.getToken();
+    if (jwt != null) {
+      jwt = jwt.substring(1, jwt.length - 1);
+      contentTypeHeader['Authorization'] = 'Bearer $jwt';
+    }
+
     final response = await http.delete(
       Uri.parse(url),
       headers: contentTypeHeader,
