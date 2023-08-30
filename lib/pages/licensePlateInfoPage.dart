@@ -3,6 +3,10 @@ import 'package:lpdr_mobile/components/sideBar.dart';
 import 'package:lpdr_mobile/components/topbar.dart';
 
 class LicensePlateInfoPage extends StatefulWidget {
+  final int id; // Add an ID field
+
+  LicensePlateInfoPage({required this.id}); // Constructor that takes an ID parameter
+
   @override
   _LicensePlateInfoPageState createState() => _LicensePlateInfoPageState();
 }
@@ -21,7 +25,7 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: TopBar(
-          title: 'License Plate Information',
+          title: 'Plate Detected',
           onMenuPressed: openDrawer,
         ),
       ),
@@ -31,7 +35,7 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
           Expanded(
             child: Center(
               child: Text(
-                'This is the home page',
+                'This is the license plate info page for ID: ${widget.id}',
                 style: TextStyle(fontSize: 24),
               ),
             ),

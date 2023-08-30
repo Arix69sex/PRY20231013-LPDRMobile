@@ -74,7 +74,7 @@ class Sidebar extends StatelessWidget {
                   leading: Icon(Icons.document_scanner),
                   title: Text('License test'),
                   onTap: () async {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => LicensePlateInfoPage()));
+                    //Navigator.push(context, MaterialPageRoute(builder: (context) => LicensePlateInfoPage()));
                   },
                 ),
                 ListTile(

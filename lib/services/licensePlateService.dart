@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 import 'package:lpdr_mobile/util/HttpRequest.dart';
@@ -58,12 +56,12 @@ class LicensePlateService {
   }
 
   Future<Response?> createLicensePlate(
-      String userId,
+      int userId,
       String code,
-      Float latitude,
-      Float longitude,
-      Bool hasInfractions,
-      Bool takenActions) async {
+      double latitude,
+      double longitude,
+      bool hasInfractions,
+      bool takenActions) async {
     var response;
     try {
       var baseurl = dotenv.env["API_URL"];
@@ -88,12 +86,12 @@ class LicensePlateService {
   }
 
   Future<Response?> updateLicensePlateById(
-      String licensePlateId,
+      int licensePlateId,
       String code,
-      Float latitude,
-      Float longitude,
-      Bool hasInfractions,
-      Bool takenActions) async {
+      double latitude,
+      double longitude,
+      bool hasInfractions,
+      bool takenActions) async {
     var response;
     try {
       var baseurl = dotenv.env["API_URL"];
