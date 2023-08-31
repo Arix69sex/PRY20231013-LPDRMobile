@@ -39,7 +39,7 @@ class InfractionService {
     }
   }
 
-  Future<Response?> getInfractionByUserId(String licensePlateId) async {
+  Future<Response?> getInfractionByLicensePlateId(String licensePlateId) async {
     var response;
     try {
       var baseurl = dotenv.env["API_URL"];

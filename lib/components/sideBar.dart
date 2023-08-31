@@ -39,35 +39,24 @@ class Sidebar extends StatelessWidget {
                   leading: Icon(Icons.camera),
                   title: Text('Camera'),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomePage()));
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.person),
                   title: Text('Profile'),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => ProfilePage()));
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.history),
                   title: Text('History'),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryPage()));
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.window),
-                  title: Text('Owner test'),
-                  onTap: () async {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => OwnerPage()));
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.note),
-                  title: Text('Infraction test'),
-                  onTap: () async {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => InfractionsPage()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HistoryPage()));
                   },
                 ),
                 ListTile(

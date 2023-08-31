@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lpdr_mobile/components/messageSnackBar.dart';
 import 'package:lpdr_mobile/components/sideBar.dart';
 import 'package:lpdr_mobile/components/topbar.dart';
+import 'package:lpdr_mobile/models/licensePlateModel.dart';
 import 'package:lpdr_mobile/pages/licensePlateInfoPage.dart';
 import 'package:lpdr_mobile/services/licensePlateService.dart';
 import 'package:lpdr_mobile/util/Jwt.dart';
@@ -18,8 +19,8 @@ class _HistoryPageState extends State<HistoryPage> {
   GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
   final TextEditingController _searchController = TextEditingController();
   late final LicensePlateService licensePlateService;
-  List<Item> items = [
-    Item(
+  List<LicensePlate> items = [
+    LicensePlate(
         id: 0,
         longitude: 0.0,
         latitude: 0.0,
@@ -30,7 +31,7 @@ class _HistoryPageState extends State<HistoryPage> {
         takenActions: false)
     // Add more items here
   ];
-  List<Item> filteredItems = [];
+  List<LicensePlate> filteredItems = [];
 
   @override
   void initState() {
@@ -53,7 +54,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
     // Create a list of items from the service response
     items = decodedResponse.map((data) {
-      return Item(
+      return LicensePlate(
         id: data["id"],
         code: data["code"],
         longitude: data["longitude"],
@@ -83,7 +84,7 @@ class _HistoryPageState extends State<HistoryPage> {
       MessageSnackBar.showMessage(context, "Taken actions updated.");
       final index = items.indexOf(item);
       if (index != -1) {
-        final newItem = Item(
+        final newItem = LicensePlate(
           id: item.id,
           longitude: item.longitude,
           latitude: item.latitude,
@@ -112,7 +113,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
     // Create a list of items from the service response
     items = decodedResponse.map((data) {
-      return Item(
+      return LicensePlate(
         id: data["id"],
         code: data["code"],
         longitude: data["longitude"],
@@ -262,23 +263,4 @@ class _HistoryPageState extends State<HistoryPage> {
       ),
     );
   }
-}
-
-class Item {
-  final int id;
-  final String code;
-  final double longitude;
-  final double latitude;
-  final String imageUrl;
-  final bool hasInfractions;
-  final bool takenActions;
-
-  Item(
-      {required this.id,
-      required this.code,
-      required this.longitude,
-      required this.latitude,
-      required this.imageUrl,
-      required this.hasInfractions,
-      required this.takenActions});
 }

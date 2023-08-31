@@ -3,6 +3,10 @@ import 'package:lpdr_mobile/components/sideBar.dart';
 import 'package:lpdr_mobile/components/topbar.dart';
 
 class InfractionsPage extends StatefulWidget {
+  final int licensePlateId;
+
+  InfractionsPage({required this.licensePlateId});
+
   @override
   _InfractionsPageState createState() => _InfractionsPageState();
 }

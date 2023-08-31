@@ -3,6 +3,10 @@ import 'package:lpdr_mobile/components/sideBar.dart';
 import 'package:lpdr_mobile/components/topbar.dart';
 
 class OwnerPage extends StatefulWidget {
+  final int licensePlateId;
+
+  OwnerPage({required this.licensePlateId});
+
   @override
   _OwnerPageState createState() => _OwnerPageState();
 }
