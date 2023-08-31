@@ -6,7 +6,8 @@ class LicensePlate {
   final String imageUrl;
   final bool hasInfractions;
   final bool takenActions;
-
+  final int userId;
+  
   LicensePlate(
       {required this.id,
       required this.code,
@@ -14,5 +15,6 @@ class LicensePlate {
       required this.latitude,
       required this.imageUrl,
       required this.hasInfractions,
-      required this.takenActions});
+      required this.takenActions,
+      required this.userId});
 }

@@ -31,7 +31,8 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
       imageUrl:
           'https://media.wired.com/photos/5e2b52d1097df7000896da19/16:9/w_2399,h_1349,c_limit/Transpo-licenseplates-502111737.jpg',
       hasInfractions: false,
-      takenActions: false);
+      takenActions: false,
+      userId: 0);
   late int infractionsNumber = 0;
   @override
   void initState() {
@@ -61,6 +62,7 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
             : 'https://media.wired.com/photos/5e2b52d1097df7000896da19/16:9/w_2399,h_1349,c_limit/Transpo-licenseplates-502111737.jpg',
         hasInfractions: decodedlicensePlateResponse["hasInfractions"],
         takenActions: decodedlicensePlateResponse["takenActions"],
+        userId: decodedlicensePlateResponse["userId"]
       );
       infractionsNumber = decodedInfractionsResponse.length;
     });

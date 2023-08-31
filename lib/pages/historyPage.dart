@@ -28,7 +28,8 @@ class _HistoryPageState extends State<HistoryPage> {
         imageUrl:
             'https://media.wired.com/photos/5e2b52d1097df7000896da19/16:9/w_2399,h_1349,c_limit/Transpo-licenseplates-502111737.jpg',
         hasInfractions: false,
-        takenActions: false)
+        takenActions: false,
+        userId: 0)
     // Add more items here
   ];
   List<LicensePlate> filteredItems = [];
@@ -62,6 +63,7 @@ class _HistoryPageState extends State<HistoryPage> {
         imageUrl: data["imageData"],
         hasInfractions: data["hasInfractions"],
         takenActions: data["takenActions"],
+        userId: decodedToken["id"]
       );
     }).toList();
 
@@ -92,6 +94,7 @@ class _HistoryPageState extends State<HistoryPage> {
           imageUrl: item.imageUrl,
           hasInfractions: item.hasInfractions,
           takenActions: !item.takenActions,
+          userId: item.userId
         );
 
         setState(() {
@@ -121,6 +124,7 @@ class _HistoryPageState extends State<HistoryPage> {
         imageUrl: data["imageData"],
         hasInfractions: data["hasInfractions"],
         takenActions: data["takenActions"],
+        userId: data["userId"]
       );
     }).toList();
 
