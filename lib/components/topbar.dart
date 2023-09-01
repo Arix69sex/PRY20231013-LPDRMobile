@@ -37,7 +37,7 @@ class TopBar extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              fontSize: 25, // Adjust the font size as needed
+              fontSize: 22, // Adjust the font size as needed
               color: Colors.black, // Text color// FontWeight
             ),
           ),

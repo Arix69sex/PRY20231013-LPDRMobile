@@ -39,7 +39,7 @@ class OwnerService {
     }
   }
 
-  Future<Response?> getOwnerByUserId(String licensePlateId) async {
+  Future<Response?> getOwnerByLicensePlateId(String licensePlateId) async {
     var response;
     try {
       var baseurl = dotenv.env["API_URL"];

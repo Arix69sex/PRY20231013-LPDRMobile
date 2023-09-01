@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lpdr_mobile/pages/historyPage.dart';
 import 'package:lpdr_mobile/pages/home.dart';
-import 'package:lpdr_mobile/pages/infractionsPage.dart';
-import 'package:lpdr_mobile/pages/licensePlateInfoPage.dart';
 import 'package:lpdr_mobile/pages/loginPage.dart';
-import 'package:lpdr_mobile/pages/ownerPage.dart';
 import 'package:lpdr_mobile/pages/profilePage.dart';
 import 'package:lpdr_mobile/util/Jwt.dart';
 
@@ -57,13 +54,6 @@ class Sidebar extends StatelessWidget {
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => HistoryPage()));
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.document_scanner),
-                  title: Text('License test'),
-                  onTap: () async {
-                    //Navigator.push(context, MaterialPageRoute(builder: (context) => LicensePlateInfoPage()));
                   },
                 ),
                 ListTile(

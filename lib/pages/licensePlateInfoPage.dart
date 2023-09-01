@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:lpdr_mobile/components/messageSnackBar.dart';
 import 'package:lpdr_mobile/components/sideBar.dart';
 import 'package:lpdr_mobile/components/topbar.dart';
 import 'package:lpdr_mobile/models/licensePlateModel.dart';
@@ -8,6 +9,7 @@ import 'package:lpdr_mobile/pages/infractionsPage.dart';
 import 'package:lpdr_mobile/pages/ownerPage.dart';
 import 'package:lpdr_mobile/services/infractionService.dart';
 import 'package:lpdr_mobile/services/licensePlateService.dart';
+import 'package:lpdr_mobile/services/ownerService.dart';
 
 class LicensePlateInfoPage extends StatefulWidget {
   final int id; // Add an ID field
@@ -23,6 +25,7 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late final LicensePlateService licensePlateService;
   late final InfractionService infractionsService;
+  late final OwnerService ownerService;
   late LicensePlate licensePlate = LicensePlate(
       id: 0,
       longitude: 0.0,
@@ -38,6 +41,7 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
   void initState() {
     super.initState();
     licensePlateService = LicensePlateService();
+    ownerService = OwnerService();
     infractionsService = InfractionService();
     getLicensePlate(widget.id);
   }
@@ -53,19 +57,37 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
         json.decode(response!.body)?["infraction"];
     setState(() {
       licensePlate = LicensePlate(
-        id: decodedlicensePlateResponse["id"],
-        code: decodedlicensePlateResponse["code"],
-        longitude: decodedlicensePlateResponse["longitude"],
-        latitude: decodedlicensePlateResponse["latitude"],
-        imageUrl: decodedlicensePlateResponse["imageData"] != ""
-            ? decodedlicensePlateResponse["imageData"]
-            : 'https://media.wired.com/photos/5e2b52d1097df7000896da19/16:9/w_2399,h_1349,c_limit/Transpo-licenseplates-502111737.jpg',
-        hasInfractions: decodedlicensePlateResponse["hasInfractions"],
-        takenActions: decodedlicensePlateResponse["takenActions"],
-        userId: decodedlicensePlateResponse["userId"]
-      );
+          id: decodedlicensePlateResponse["id"],
+          code: decodedlicensePlateResponse["code"],
+          longitude: decodedlicensePlateResponse["longitude"],
+          latitude: decodedlicensePlateResponse["latitude"],
+          imageUrl: decodedlicensePlateResponse["imageData"] != ""
+              ? decodedlicensePlateResponse["imageData"]
+              : 'https://media.wired.com/photos/5e2b52d1097df7000896da19/16:9/w_2399,h_1349,c_limit/Transpo-licenseplates-502111737.jpg',
+          hasInfractions: decodedlicensePlateResponse["hasInfractions"],
+          takenActions: decodedlicensePlateResponse["takenActions"],
+          userId: decodedlicensePlateResponse["user"]);
       infractionsNumber = decodedInfractionsResponse.length;
     });
+  }
+
+  Future<bool> hasOwner() async {
+    var response =
+        await ownerService.getOwnerByLicensePlateId(licensePlate.id.toString());
+
+    final decodedResponse = json.decode(response!.body)?["owner"];
+
+    return decodedResponse.isNotEmpty;
+  }
+
+  Future<bool> hasInfractions() async {
+    var response = await infractionsService
+        .getInfractionByLicensePlateId(licensePlate.id.toString());
+
+    final List<dynamic> decodedResponse =
+        json.decode(response!.body)?["infraction"];
+
+    return decodedResponse.isNotEmpty;
   }
 
   void openDrawer() {
@@ -130,12 +152,18 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  OwnerPage(licensePlateId: widget.id)));
+                    onPressed: () async {
+                      var shouldRedirect = await hasOwner();
+                      if (shouldRedirect) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    OwnerPage(licensePlateId: widget.id)));
+                      } else {
+                        MessageSnackBar.showMessage(
+                            context, "Owner not found.");
+                      }
                     },
                     child: Text('Owner'),
                     style: ElevatedButton.styleFrom(
@@ -143,12 +171,18 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
                         foregroundColor: Colors.white,
                         elevation: 2)),
                 ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  InfractionsPage(licensePlateId: widget.id)));
+                    onPressed: () async {
+                      var shouldRedirect = await hasInfractions();
+                      if (shouldRedirect) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => InfractionsPage(
+                                    licensePlateId: widget.id)));
+                      } else {
+                        MessageSnackBar.showMessage(
+                            context, "Infractions not found.");
+                      }
                     },
                     child: Text('Infractions'),
                     style: ElevatedButton.styleFrom(
