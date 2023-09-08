@@ -1,17 +1,9 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:lpdr_mobile/components/sideBar.dart';
 import 'package:lpdr_mobile/components/topbar.dart';
-import 'package:gallery_saver/gallery_saver.dart';
-import 'package:image/image.dart' as img;
-import 'package:lpdr_mobile/pages/previewScreenTest.dart';
-import 'package:lpdr_mobile/util/HttpRequest.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart';
+import 'package:lpdr_mobile/services/frameService.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -20,12 +12,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  final FrameService frameService = FrameService();
   CameraController? _cameraController;
   bool isRecording = false;
   bool takingPicture = false;
   Timer? pictureTimer;
-  late CameraImage _cameraImage;
+
   void openDrawer() {
     _scaffoldKey.currentState!.openDrawer();
   }
@@ -55,98 +47,35 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     _cameraController?.dispose();
-    pictureTimer?.cancel(); // Cancel the timer when disposing
+    pictureTimer?.cancel();
     super.dispose();
   }
 
   Future<void> _startRecording() async {
-    /*if (isRecording) return;
-
-    /*pictureTimer = Timer.periodic(Duration(milliseconds: 333), (_) {
-      // Capture and send an image every 1/3 of a second
-      _captureAndSendImage();
-    });*/
-    print(takingPicture);
-
-      if (!takingPicture) {
-       await _cameraController!.stopImageStream();
-      takingPicture = true;
-      final XFile videoFrame = await _cameraController!.takePicture();
-      print(videoFrame.path);
-      Navigator.push(
-        this.context,
-        MaterialPageRoute(
-            builder: (context) => PreviewScreen(
-                  imgPath: videoFrame.path,
-                )),
-      );
-      final bytes = await videoFrame.readAsBytes();
-      print(bytes);
-      takingPicture = false;
-    } else {
-      takingPicture = false;
-    }
-    
-    
-
-    /*_cameraController!.startImageStream((image) => {
-          if (isRecording)
-            {
-              print(image)
-              //_cameraImage = image
-            }
-        });
-*/
-    setState(() {
-      isRecording = true;
-    });
-
-    */
-
     if (!_cameraController!.value.isInitialized) {
       return;
     }
-    //await _cameraController!.stopVideoRecording();
-    //await _cameraController!.startVideoRecording();
 
     setState(() {
       isRecording = true;
     });
 
-    // Start sending frames to the backend while recording
-
-    final XFile videoFrame = await _cameraController!.takePicture();
-    final bytes = await videoFrame.readAsBytes();
-    print("bytes");
-    print(bytes);
-    var baseurl = dotenv.env["API_URL"];
-    print(baseurl);
-    var httpRequest = new HttpRequest();
-
-    var body = {"bytes": bytes};
-    final response =
-        await httpRequest.post('${baseurl}licensePlates/test/create', jsonEncode(body));
-
-    // Send the bytes to your backend using HTTP POST or your preferred method
-    //await _sendFrameToBackend(bytes);
+    pictureTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (isRecording) {
+        sendFramesToBackend();
+      }
+    });
   }
 
-  void capture() {
-    ByteBuffer byteBuffer =
-        Uint8List.fromList(_cameraImage.planes[0].bytes).buffer;
-    img.Image image = img.Image.fromBytes(
-        width: _cameraImage.width,
-        height: _cameraImage.height,
-        bytes: byteBuffer);
-    Uint8List jpeg = Uint8List.fromList(img.encodeJpg(image));
-    print(jpeg.length);
-    print("Image captured");
+  void sendFramesToBackend() async {
+    final XFile videoFrame = await _cameraController!.takePicture();
+    final bytes = await videoFrame.readAsBytes();
+    await frameService.sendFrames(bytes);
   }
 
   Future<void> _stopRecording() async {
-    if (!isRecording) return;
-
-    pictureTimer?.cancel(); // Cancel the picture-taking timer
+    pictureTimer?.cancel();
+    pictureTimer = null;
     setState(() {
       isRecording = false;
     });

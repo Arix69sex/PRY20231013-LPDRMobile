@@ -8,7 +8,6 @@ import 'package:lpdr_mobile/models/infractionModel.dart';
 import 'package:lpdr_mobile/models/licensePlateModel.dart';
 import 'package:lpdr_mobile/services/infractionService.dart';
 import 'package:lpdr_mobile/services/licensePlateService.dart';
-import 'package:lpdr_mobile/services/ownerService.dart';
 
 class InfractionsPage extends StatefulWidget {
   final int licensePlateId;
@@ -52,10 +51,8 @@ class _InfractionsPageState extends State<InfractionsPage> {
     final Map<String, dynamic> decodedlicensePlateResponse =
         json.decode(response!.body)["licensePlate"];
 
-    print(decodedlicensePlateResponse["id"]);
     response = await infractionService.getInfractionByLicensePlateId(
         decodedlicensePlateResponse["id"].toString());
-    print(response!.body);
     final List<dynamic> decodedInfractionsResponse =
         json.decode(response!.body)?["infraction"];
 

@@ -61,7 +61,7 @@ class _OwnerPageState extends State<OwnerPage> {
         .getOwnerByLicensePlateId(decodedlicensePlateResponse["id"].toString());
     print(response!.body);
     final Map<String, dynamic> decodedOwnerResponse =
-        json.decode(response!.body)?["owner"];
+        json.decode(response.body)?["owner"];
     setState(() {
       licensePlate = LicensePlate(
           id: decodedlicensePlateResponse["id"],
