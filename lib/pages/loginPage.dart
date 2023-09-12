@@ -19,7 +19,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
+        body: SingleChildScrollView(
+            child: Column(
       children: <Widget>[
         // First Half (Light Blue Screen)
         Container(
@@ -80,8 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () async {
                     var authServiceInstance = AuthService();
                     var response = await authServiceInstance.login(
-                        emailController.text,
-                        passwordController.text);
+                        emailController.text, passwordController.text);
                     if (response?.statusCode != 400) {
                       await Jwt.saveToken(response!.body);
                       Navigator.of(context).push(MaterialPageRoute(
@@ -104,7 +104,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SignupPage()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SignupPage()));
                   },
                 )
               ],
@@ -112,6 +113,6 @@ class _LoginPageState extends State<LoginPage> {
           ),
         )
       ],
-    ));
+    )));
   }
 }

@@ -18,7 +18,8 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
+        body: SingleChildScrollView(
+            child: Column(
       children: <Widget>[
         // First Half (Light Blue Screen)
         Container(
@@ -79,8 +80,7 @@ class _SignupPageState extends State<SignupPage> {
                   onPressed: () async {
                     var authServiceInstance = new AuthService();
                     var response = await authServiceInstance.signup(
-                        emailController.text,
-                        passwordController.text);
+                        emailController.text, passwordController.text);
                     if (response?.statusCode != 400) {
                       await Jwt.saveToken(response!.body);
                       print(await Jwt.getToken());
@@ -113,6 +113,6 @@ class _SignupPageState extends State<SignupPage> {
           ),
         )
       ],
-    ));
+    )));
   }
 }
