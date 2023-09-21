@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:lpdr_mobile/components/messageSnackBar.dart';
@@ -31,8 +32,7 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
       longitude: 0.0,
       latitude: 0.0,
       code: 'TEST123',
-      imageUrl:
-          'https://media.wired.com/photos/5e2b52d1097df7000896da19/16:9/w_2399,h_1349,c_limit/Transpo-licenseplates-502111737.jpg',
+      imageUrl: Uint8List.fromList([65, 66, 67, 68, 69]),
       hasInfractions: false,
       takenActions: false,
       userId: 0);
@@ -55,15 +55,16 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
         decodedlicensePlateResponse["id"].toString());
     final List<dynamic> decodedInfractionsResponse =
         json.decode(response!.body)?["infraction"];
+
+    final Uint8List imageBytes = await licensePlateService
+        .getImageOfLicensePlate(decodedlicensePlateResponse["id"]);
     setState(() {
       licensePlate = LicensePlate(
           id: decodedlicensePlateResponse["id"],
           code: decodedlicensePlateResponse["code"],
           longitude: decodedlicensePlateResponse["longitude"],
           latitude: decodedlicensePlateResponse["latitude"],
-          imageUrl: decodedlicensePlateResponse["imageData"] != ""
-              ? decodedlicensePlateResponse["imageData"]
-              : 'https://media.wired.com/photos/5e2b52d1097df7000896da19/16:9/w_2399,h_1349,c_limit/Transpo-licenseplates-502111737.jpg',
+          imageUrl: imageBytes,
           hasInfractions: decodedlicensePlateResponse["hasInfractions"],
           takenActions: decodedlicensePlateResponse["takenActions"],
           userId: decodedlicensePlateResponse["user"]);
@@ -111,12 +112,14 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
         children: <Widget>[
           // Top Part: Image and License Plate Code
           Expanded(
-            flex: 2,
+            flex: 1,
             child: Column(
               children: <Widget>[
-                Image.network(
+                SizedBox(height: 28.0),
+                Image.memory(
                   licensePlate.imageUrl,
                   fit: BoxFit.cover,
+                  width: 250,
                 ),
                 SizedBox(height: 16.0),
                 Text(

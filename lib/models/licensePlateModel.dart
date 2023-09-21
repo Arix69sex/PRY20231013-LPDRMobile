@@ -1,9 +1,11 @@
+import 'dart:typed_data';
+
 class LicensePlate {
   final int id;
   final String code;
   final double longitude;
   final double latitude;
-  final String imageUrl;
+  final Uint8List imageUrl;
   final bool hasInfractions;
   final bool takenActions;
   final int userId;

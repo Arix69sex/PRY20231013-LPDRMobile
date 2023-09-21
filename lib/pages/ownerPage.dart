@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:lpdr_mobile/components/itemRow.dart';
@@ -28,8 +29,7 @@ class _OwnerPageState extends State<OwnerPage> {
       longitude: 0.0,
       latitude: 0.0,
       code: '',
-      imageUrl:
-          'https://media.wired.com/photos/5e2b52d1097df7000896da19/16:9/w_2399,h_1349,c_limit/Transpo-licenseplates-502111737.jpg',
+      imageUrl: Uint8List.fromList([65, 66, 67, 68, 69]),
       hasInfractions: false,
       takenActions: false,
       userId: 0);
@@ -56,12 +56,10 @@ class _OwnerPageState extends State<OwnerPage> {
     final Map<String, dynamic> decodedlicensePlateResponse =
         json.decode(response!.body)["licensePlate"];
 
-    print(decodedlicensePlateResponse["id"]);
     response = await ownerService
         .getOwnerByLicensePlateId(decodedlicensePlateResponse["id"].toString());
-    print(response!.body);
     final Map<String, dynamic> decodedOwnerResponse =
-        json.decode(response.body)?["owner"];
+        json.decode(response!.body)?["owner"];
     setState(() {
       licensePlate = LicensePlate(
           id: decodedlicensePlateResponse["id"],

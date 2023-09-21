@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:lpdr_mobile/components/itemRow.dart';
@@ -29,8 +30,7 @@ class _InfractionsPageState extends State<InfractionsPage> {
       longitude: 0.0,
       latitude: 0.0,
       code: '',
-      imageUrl:
-          'https://media.wired.com/photos/5e2b52d1097df7000896da19/16:9/w_2399,h_1349,c_limit/Transpo-licenseplates-502111737.jpg',
+      imageUrl: Uint8List.fromList([65, 66, 67, 68, 69]),
       hasInfractions: false,
       takenActions: false,
       userId: 0);
@@ -64,15 +64,16 @@ class _InfractionsPageState extends State<InfractionsPage> {
           fine: data["fine"],
           licensePlateId: data["licensePlate"]);
     }).toList();
+
+    final Uint8List imageBytes = await licensePlateService
+        .getImageOfLicensePlate(decodedlicensePlateResponse["id"]);
     setState(() {
       licensePlate = LicensePlate(
           id: decodedlicensePlateResponse["id"],
           code: decodedlicensePlateResponse["code"],
           longitude: decodedlicensePlateResponse["longitude"],
           latitude: decodedlicensePlateResponse["latitude"],
-          imageUrl: decodedlicensePlateResponse["imageData"] != ""
-              ? decodedlicensePlateResponse["imageData"]
-              : 'https://media.wired.com/photos/5e2b52d1097df7000896da19/16:9/w_2399,h_1349,c_limit/Transpo-licenseplates-502111737.jpg',
+          imageUrl: imageBytes,
           hasInfractions: decodedlicensePlateResponse["hasInfractions"],
           takenActions: decodedlicensePlateResponse["takenActions"],
           userId: decodedlicensePlateResponse["user"]);
@@ -143,17 +144,12 @@ class _InfractionsPageState extends State<InfractionsPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         ItemRow(icon: Icons.description, text: infraction.name),
-
                         SizedBox(height: 15),
-
                         ItemRow(icon: Icons.warning, text: infraction.level),
-
                         SizedBox(height: 15),
-
                         ItemRow(
                             icon: Icons.savings,
-                            text:
-                                "S/. ${infraction.fine}"), 
+                            text: "S/. ${infraction.fine}"),
                       ],
                     ),
                   ),

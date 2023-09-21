@@ -151,8 +151,7 @@ class _UserProfileViewState extends State<UserProfileView> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(32.0),
                                 ),
-                                minimumSize:
-                                    Size(100, 40),
+                                minimumSize: Size(100, 40),
                               ),
                             ),
                             SizedBox(width: 20.0),
@@ -178,21 +177,20 @@ class _UserProfileViewState extends State<UserProfileView> {
                                 if (response!.statusCode == 200) {
                                   MessageSnackBar.showMessage(
                                       context, "Profile updated.");
-                                      setState(() {
-                                        isEditing = false;
-                                      });
+                                  setState(() {
+                                    isEditing = false;
+                                  });
                                 } else {
                                   MessageSnackBar.showMessage(
                                       context, "Update failed.");
-                                      setState(() {
-                                        isEditing = false;
-                                      });
+                                  setState(() {
+                                    isEditing = false;
+                                  });
                                 }
                               },
                               child: Text('Save'),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    Colors.lightBlue,
+                                backgroundColor: Colors.lightBlue,
                                 foregroundColor: Colors.white,
                                 elevation: 3,
                                 shape: RoundedRectangleBorder(
@@ -245,18 +243,15 @@ class _UserProfileViewState extends State<UserProfileView> {
               fillColor: Colors.grey[200],
               hintStyle: TextStyle(color: const Color.fromARGB(46, 46, 46, 1)),
               border: OutlineInputBorder(
-                borderRadius:
-                    BorderRadius.circular(10.0), 
+                borderRadius: BorderRadius.circular(10.0),
                 borderSide: BorderSide(
-                    color: const Color.fromARGB(255, 51, 51, 51),
-                    width: 1.0),
+                    color: const Color.fromARGB(255, 51, 51, 51), width: 1.0),
               ),
               focusedBorder: OutlineInputBorder(
                 // Set the focused border style
                 borderRadius: BorderRadius.circular(10.0),
                 borderSide: BorderSide(color: Colors.blue, width: 1.0),
               ),
-
             ),
           ),
         ),

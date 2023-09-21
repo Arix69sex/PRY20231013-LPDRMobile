@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 import 'package:lpdr_mobile/util/HttpRequest.dart';
@@ -30,7 +31,8 @@ class LicensePlateService {
       print(baseurl);
       var httpRequest = new HttpRequest();
 
-      response = await httpRequest.get('${baseurl}licensePlates/${licensePlateId}');
+      response =
+          await httpRequest.get('${baseurl}licensePlates/${licensePlateId}');
 
       return response;
     } catch (error) {
@@ -46,7 +48,8 @@ class LicensePlateService {
       print(baseurl);
       var httpRequest = new HttpRequest();
 
-      response = await httpRequest.get('${baseurl}licensePlates/user/${userId}');
+      response =
+          await httpRequest.get('${baseurl}licensePlates/user/${userId}');
 
       return response;
     } catch (error) {
@@ -55,13 +58,8 @@ class LicensePlateService {
     }
   }
 
-  Future<Response?> createLicensePlate(
-      int userId,
-      String code,
-      double latitude,
-      double longitude,
-      bool hasInfractions,
-      bool takenActions) async {
+  Future<Response?> createLicensePlate(int userId, String code, double latitude,
+      double longitude, bool hasInfractions, bool takenActions) async {
     var response;
     try {
       var baseurl = dotenv.env["API_URL"];
@@ -79,6 +77,20 @@ class LicensePlateService {
       response = await httpRequest.post('${baseurl}licensePlates/create', body);
 
       return response;
+    } catch (error) {
+      print(error);
+      return response;
+    }
+  }
+
+  Future<Uint8List> getImageOfLicensePlate(int licensePlateId) async {
+    var response;
+    try {
+      var baseurl = dotenv.env["API_URL"];
+      var httpRequest = new HttpRequest();
+      response = await httpRequest
+          .get('${baseurl}licensePlates/image/${licensePlateId}');
+      return response.bodyBytes;
     } catch (error) {
       print(error);
       return response;

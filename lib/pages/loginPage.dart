@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:lpdr_mobile/components/messageSnackBar.dart';
 import 'package:lpdr_mobile/util/Jwt.dart';
@@ -82,14 +84,17 @@ class _LoginPageState extends State<LoginPage> {
                     var authServiceInstance = AuthService();
                     var response = await authServiceInstance.login(
                         emailController.text, passwordController.text);
+                    final dynamic decodedResponse =
+                        json.decode(response!.body);
+
                     if (response?.statusCode != 400) {
-                      await Jwt.saveToken(response!.body);
+                      await Jwt.saveToken(decodedResponse["token"]);
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => HomePage(),
                       ));
                     } else {
                       MessageSnackBar.showMessage(
-                          context, "User already exists");
+                          context, "User already exists or not found");
                       print(response?.body);
                     }
                   },
