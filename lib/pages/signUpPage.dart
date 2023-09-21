@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:lpdr_mobile/components/messageSnackBar.dart';
 import 'package:lpdr_mobile/pages/home.dart';
+import 'package:lpdr_mobile/pages/loginPage.dart';
 import 'package:lpdr_mobile/services/authService.dart';
 import 'package:lpdr_mobile/util/Jwt.dart';
 
@@ -81,9 +84,12 @@ class _SignupPageState extends State<SignupPage> {
                     var authServiceInstance = new AuthService();
                     var response = await authServiceInstance.signup(
                         emailController.text, passwordController.text);
+
+                    final dynamic decodedResponse =
+                        json.decode(response!.body);
+                    
                     if (response?.statusCode != 400) {
-                      await Jwt.saveToken(response!.body);
-                      print(await Jwt.getToken());
+                      await Jwt.saveToken(decodedResponse["token"]);
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => HomePage(),
                       ));
@@ -105,7 +111,7 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                   onTap: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SignupPage()));
+                        MaterialPageRoute(builder: (context) => LoginPage()));
                   },
                 )
               ],

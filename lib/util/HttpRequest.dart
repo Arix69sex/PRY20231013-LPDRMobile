@@ -13,7 +13,6 @@ class HttpRequest {
   Future<http.Response> post(String url, dynamic body) async {
     var jwt = await Jwt.getToken();
     if (jwt != null) {
-      jwt = jwt.substring(1, jwt.length - 1);
       contentTypeHeader['Authorization'] = 'Bearer $jwt';
     }
     final response = await http.post(
@@ -27,7 +26,6 @@ class HttpRequest {
   Future<http.Response> get(String url) async {
     var jwt = await Jwt.getToken();
     if (jwt != null) {
-      jwt = jwt.substring(1, jwt.length - 1);
       contentTypeHeader['Authorization'] = 'Bearer $jwt';
     }
     final response = await http.get(

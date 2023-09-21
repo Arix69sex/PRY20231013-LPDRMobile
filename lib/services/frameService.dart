@@ -10,16 +10,21 @@ class FrameService {
   FrameService();
 
   // Method
-  Future<Response?> sendFrames(Uint8List bytes) async {
+  Future<Response?> sendFrames(String userId, Uint8List image) async {
     var response;
     try {
       var baseurl = dotenv.env["API_URL"];
       var httpRequest = new HttpRequest();
 
-       var body = {"bytes": bytes};
+      var body = {
+        "userId": userId,
+        "image": image,
+        "longitude": 1,
+        "latitude": 1
+        };
       response =
          await httpRequest.post(
-          '${baseurl}licensePlates/test/create', jsonEncode(body));
+          '${baseurl}licensePlates/detect', jsonEncode(body));
 
       return response;
     } catch (error) {

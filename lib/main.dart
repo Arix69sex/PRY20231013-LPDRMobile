@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:in_app_notification/in_app_notification.dart';
 import 'package:lpdr_mobile/pages/home.dart';
 import 'package:lpdr_mobile/pages/loginPage.dart';
 import 'package:lpdr_mobile/util/Jwt.dart';
@@ -17,14 +18,15 @@ Future main() async {
   bool loggedIn = await Jwt.getToken() != null ? true : false;
   print(loggedIn);
   await dotenv.load(fileName: ".env");
-  runApp(MaterialApp(
-      title: "Infraction Detection",
-      home: MyApp(loggedIn),
-      theme: ThemeData(
+  runApp(InAppNotification(
+      child: MaterialApp(
+    title: "Infraction Detection",
+    theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue),
         useMaterial3: true,
-        textTheme: GoogleFonts.interTextTheme()
-      )));
+        textTheme: GoogleFonts.interTextTheme()),
+    home: MyApp(loggedIn),
+  )));
 }
 
 class MyApp extends StatelessWidget {

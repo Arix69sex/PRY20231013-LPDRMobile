@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:lpdr_mobile/components/messageSnackBar.dart';
@@ -25,8 +26,7 @@ class _HistoryPageState extends State<HistoryPage> {
         longitude: 0.0,
         latitude: 0.0,
         code: 'XYZ456',
-        imageUrl:
-            'https://media.wired.com/photos/5e2b52d1097df7000896da19/16:9/w_2399,h_1349,c_limit/Transpo-licenseplates-502111737.jpg',
+        imageUrl: Uint8List.fromList([65, 66, 67, 68, 69]),
         hasInfractions: false,
         takenActions: false,
         userId: 0)
@@ -53,19 +53,21 @@ class _HistoryPageState extends State<HistoryPage> {
     final List<dynamic> decodedResponse =
         json.decode(response!.body)["licensePlate"];
 
-    // Create a list of items from the service response
-    items = decodedResponse.map((data) {
-      return LicensePlate(
-        id: data["id"],
-        code: data["code"],
-        longitude: data["longitude"],
-        latitude: data["latitude"],
-        imageUrl: data["imageData"],
-        hasInfractions: data["hasInfractions"],
-        takenActions: data["takenActions"],
-        userId: decodedToken["id"]
-      );
-    }).toList();
+    items = [];
+    for (var index = 0; index < decodedResponse.length; index++) {
+      var data = decodedResponse[index];
+      final Uint8List imageBytes =
+          await licensePlateService.getImageOfLicensePlate(data["id"]);
+      items.add(LicensePlate(
+          id: data["id"],
+          code: data["code"],
+          longitude: data["longitude"],
+          latitude: data["latitude"],
+          imageUrl: imageBytes,
+          hasInfractions: data["hasInfractions"],
+          takenActions: data["takenActions"],
+          userId: decodedToken["id"]));
+    }
 
     // Initialize filteredItems with all items
     setState(() {
@@ -87,15 +89,14 @@ class _HistoryPageState extends State<HistoryPage> {
       final index = items.indexOf(item);
       if (index != -1) {
         final newItem = LicensePlate(
-          id: item.id,
-          longitude: item.longitude,
-          latitude: item.latitude,
-          code: item.code,
-          imageUrl: item.imageUrl,
-          hasInfractions: item.hasInfractions,
-          takenActions: !item.takenActions,
-          userId: item.userId
-        );
+            id: item.id,
+            longitude: item.longitude,
+            latitude: item.latitude,
+            code: item.code,
+            imageUrl: item.imageUrl,
+            hasInfractions: item.hasInfractions,
+            takenActions: !item.takenActions,
+            userId: item.userId);
 
         setState(() {
           items[index] = newItem;
@@ -117,15 +118,14 @@ class _HistoryPageState extends State<HistoryPage> {
     // Create a list of items from the service response
     items = decodedResponse.map((data) {
       return LicensePlate(
-        id: data["id"],
-        code: data["code"],
-        longitude: data["longitude"],
-        latitude: data["latitude"],
-        imageUrl: data["imageData"],
-        hasInfractions: data["hasInfractions"],
-        takenActions: data["takenActions"],
-        userId: data["userId"]
-      );
+          id: data["id"],
+          code: data["code"],
+          longitude: data["longitude"],
+          latitude: data["latitude"],
+          imageUrl: data["imageData"],
+          hasInfractions: data["hasInfractions"],
+          takenActions: data["takenActions"],
+          userId: data["userId"]);
     }).toList();
 
     // Initialize filteredItems with all items
@@ -229,10 +229,9 @@ class _HistoryPageState extends State<HistoryPage> {
                           },
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8.0),
-                            child: Image.network(
+                            child: Image.memory(
                               item.imageUrl,
                               width: 100.0,
-                              height: 60.0,
                               fit: BoxFit.cover,
                             ),
                           ),

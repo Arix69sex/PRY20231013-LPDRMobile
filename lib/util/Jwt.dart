@@ -29,7 +29,8 @@ class Jwt {
 
       final payload = parts[1];
       final String normalized = base64Url.normalize(payload);
-      final Map<String, dynamic> decoded = jsonDecode(utf8.decode(base64Url.decode(normalized)));
+      final Map<String, dynamic> decoded =
+          jsonDecode(utf8.decode(base64Url.decode(normalized)));
 
       return decoded;
     } catch (error) {
