@@ -33,7 +33,7 @@ class _HistoryPageState extends State<HistoryPage> {
     // Add more items here
   ];
   List<LicensePlate> filteredItems = [];
-
+  var shouldBeX = false;
   @override
   void initState() {
     super.initState();
@@ -75,7 +75,9 @@ class _HistoryPageState extends State<HistoryPage> {
     });
   }
 
-  Future<void> setLicensePlateTakenActions(item) async {
+  Future<void> setLicensePlateTakenActions(index) async {
+    var item = items[index];
+
     final response = await licensePlateService.updateLicensePlateById(
         item.id,
         item.code,
@@ -86,22 +88,10 @@ class _HistoryPageState extends State<HistoryPage> {
 
     if (response!.statusCode == 200) {
       MessageSnackBar.showMessage(context, "Taken actions updated.");
-      final index = items.indexOf(item);
-      if (index != -1) {
-        final newItem = LicensePlate(
-            id: item.id,
-            longitude: item.longitude,
-            latitude: item.latitude,
-            code: item.code,
-            imageUrl: item.imageUrl,
-            hasInfractions: item.hasInfractions,
-            takenActions: !item.takenActions,
-            userId: item.userId);
 
-        setState(() {
-          items[index] = newItem;
-        });
-      }
+      setState(() {
+        items[index].takenActions = !item.takenActions;
+      });
     } else {
       MessageSnackBar.showMessage(context, "Taken actions update failed.");
     }
@@ -114,7 +104,6 @@ class _HistoryPageState extends State<HistoryPage> {
         .getLicensePlateByUserId(decodedToken!["id"].toString());
     final List<dynamic> decodedResponse =
         json.decode(response!.body)["licensePlate"];
-
     // Create a list of items from the service response
     items = decodedResponse.map((data) {
       return LicensePlate(
@@ -241,19 +230,14 @@ class _HistoryPageState extends State<HistoryPage> {
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          !filteredItems[index].takenActions
-                              ? IconButton(
-                                  icon: Icon(Icons.check),
-                                  onPressed: () async {
-                                    await setLicensePlateTakenActions(item);
-                                  },
-                                )
-                              : IconButton(
-                                  icon: Icon(Icons.close),
-                                  onPressed: () async {
-                                    await setLicensePlateTakenActions(item);
-                                  },
-                                ),
+                          IconButton(
+                            icon: !items[index].takenActions
+                                ? Icon(Icons.check)
+                                : Icon(Icons.close),
+                            onPressed: () async {
+                              await setLicensePlateTakenActions(index);
+                            },
+                          ),
                         ],
                       ),
                     ),

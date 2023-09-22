@@ -11,7 +11,6 @@ class VehicleService {
     var response;
     try {
       var baseurl = dotenv.env["API_URL"];
-      print(baseurl);
       var httpRequest = new HttpRequest();
 
       response = await httpRequest.get('${baseurl}vehicles');
@@ -27,7 +26,6 @@ class VehicleService {
     var response;
     try {
       var baseurl = dotenv.env["API_URL"];
-      print(baseurl);
       var httpRequest = new HttpRequest();
 
       response = await httpRequest.get('${baseurl}vehicles/${vehicleId}');
@@ -43,7 +41,6 @@ class VehicleService {
     var response;
     try {
       var baseurl = dotenv.env["API_URL"];
-      print(baseurl);
       var httpRequest = new HttpRequest();
 
       response = await httpRequest.get('${baseurl}vehicles/licensePlate/${licensePlateId}');

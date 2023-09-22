@@ -11,7 +11,6 @@ class InfractionService {
     var response;
     try {
       var baseurl = dotenv.env["API_URL"];
-      print(baseurl);
       var httpRequest = new HttpRequest();
 
       response = await httpRequest.get('${baseurl}infractions');
@@ -27,7 +26,6 @@ class InfractionService {
     var response;
     try {
       var baseurl = dotenv.env["API_URL"];
-      print(baseurl);
       var httpRequest = new HttpRequest();
 
       response = await httpRequest.get('${baseurl}infractions/${infractionId}');
@@ -43,7 +41,6 @@ class InfractionService {
     var response;
     try {
       var baseurl = dotenv.env["API_URL"];
-      print(baseurl);
       var httpRequest = new HttpRequest();
 
       response = await httpRequest.get('${baseurl}infractions/licensePlate/${licensePlateId}');

@@ -59,6 +59,7 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
     final Uint8List imageBytes = await licensePlateService
         .getImageOfLicensePlate(decodedlicensePlateResponse["id"]);
     setState(() {
+      var responseDateTime =  DateTime.parse(decodedlicensePlateResponse['createdAt']);
       licensePlate = LicensePlate(
           id: decodedlicensePlateResponse["id"],
           code: decodedlicensePlateResponse["code"],
@@ -67,6 +68,7 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
           imageUrl: imageBytes,
           hasInfractions: decodedlicensePlateResponse["hasInfractions"],
           takenActions: decodedlicensePlateResponse["takenActions"],
+          createdAt: responseDateTime,
           userId: decodedlicensePlateResponse["user"]);
       infractionsNumber = decodedInfractionsResponse.length;
     });
@@ -137,9 +139,11 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
               padding: EdgeInsets.all(16.0),
               children: <Widget>[
                 _buildAttributeItem(Icons.location_on, 'Latitude',
-                    licensePlate.latitude.toString()),
+                    licensePlate.latitude.toStringAsFixed(2).toString()),
                 _buildAttributeItem(Icons.location_on, 'Longitude',
-                    licensePlate.longitude.toString()),
+                    licensePlate.longitude.toStringAsFixed(2).toString()),
+                _buildAttributeItem(Icons.today, 'Detected at',
+                    licensePlate.createdAt != null ? licensePlate.createdAt!.toLocal().toString() : ""),
                 _buildAttributeItem(Icons.warning, 'Infractions Number',
                     infractionsNumber.toString()),
                 _buildAttributeItem(Icons.done, 'Taken Actions',
@@ -154,7 +158,7 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                ElevatedButton(
+                /*ElevatedButton(
                     onPressed: () async {
                       var shouldRedirect = await hasOwner();
                       if (shouldRedirect) {
@@ -172,7 +176,7 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.lightBlue,
                         foregroundColor: Colors.white,
-                        elevation: 2)),
+                        elevation: 2)),*/
                 ElevatedButton(
                     onPressed: () async {
                       var shouldRedirect = await hasInfractions();

@@ -11,7 +11,6 @@ class OwnerService {
     var response;
     try {
       var baseurl = dotenv.env["API_URL"];
-      print(baseurl);
       var httpRequest = new HttpRequest();
 
       response = await httpRequest.get('${baseurl}owners');
@@ -27,7 +26,6 @@ class OwnerService {
     var response;
     try {
       var baseurl = dotenv.env["API_URL"];
-      print(baseurl);
       var httpRequest = new HttpRequest();
 
       response = await httpRequest.get('${baseurl}owners/${ownerId}');
@@ -43,7 +41,6 @@ class OwnerService {
     var response;
     try {
       var baseurl = dotenv.env["API_URL"];
-      print(baseurl);
       var httpRequest = new HttpRequest();
 
       response = await httpRequest.get('${baseurl}owners/licensePlate/${licensePlateId}');

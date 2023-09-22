@@ -38,7 +38,6 @@ class HttpRequest {
   Future<http.Response> patch(String url, dynamic body) async {
     var jwt = await Jwt.getToken();
     if (jwt != null) {
-      jwt = jwt.substring(1, jwt.length - 1);
       contentTypeHeader['Authorization'] = 'Bearer $jwt';
     }
 
@@ -53,7 +52,6 @@ class HttpRequest {
   Future<http.Response> delete(String url) async {
     var jwt = await Jwt.getToken();
     if (jwt != null) {
-      jwt = jwt.substring(1, jwt.length - 1);
       contentTypeHeader['Authorization'] = 'Bearer $jwt';
     }
 
