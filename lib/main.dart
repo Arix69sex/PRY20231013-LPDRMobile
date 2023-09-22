@@ -10,13 +10,7 @@ import 'package:logging/logging.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Logger.root.level = Level.INFO;
-  Logger.root.onRecord.listen((record) {
-    if (record.level >= Level.INFO) {
-      print('${record.level.name}: ${record.time}: ${record.message}');
-    }
-  });
   bool loggedIn = await Jwt.getToken() != null ? true : false;
-  print(loggedIn);
   await dotenv.load(fileName: ".env");
   runApp(InAppNotification(
       child: MaterialApp(

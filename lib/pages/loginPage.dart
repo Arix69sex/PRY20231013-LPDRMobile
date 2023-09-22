@@ -95,7 +95,6 @@ class _LoginPageState extends State<LoginPage> {
                     } else {
                       MessageSnackBar.showMessage(
                           context, "User already exists or not found");
-                      print(response?.body);
                     }
                   },
                   child: Text('Login'),

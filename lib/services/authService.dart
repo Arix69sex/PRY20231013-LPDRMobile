@@ -13,7 +13,6 @@ class AuthService {
     var response;
     try {
       var baseurl = dotenv.env["API_URL"];
-      print(baseurl);
       var httpRequest = new HttpRequest();
 
       var body = {"email": email, "password": password};

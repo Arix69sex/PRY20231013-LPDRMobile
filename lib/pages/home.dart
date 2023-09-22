@@ -12,7 +12,7 @@ import 'package:lpdr_mobile/services/frameService.dart';
 import 'package:lpdr_mobile/util/Jwt.dart';
 import 'package:in_app_notification/in_app_notification.dart';
 import 'dart:math' as math;
-
+import 'package:geolocator/geolocator.dart';
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -93,9 +93,13 @@ class _HomePageState extends State<HomePage> {
     final bytes = await videoFrame.readAsBytes();
     var token = await Jwt.getToken();
     var decodedToken = await Jwt.decodeToken(token!);
+    Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
 
+    double latitude = position.latitude;
+    double longitude = position.longitude;
     final response =
-        await frameService.sendFrames(decodedToken!["id"].toString(), bytes);
+        await frameService.sendFrames(decodedToken!["id"].toString(), bytes, latitude, longitude);
     final Map<String, dynamic> decodedResponse = json.decode(response!.body);
 
     if (response.statusCode == 201) {

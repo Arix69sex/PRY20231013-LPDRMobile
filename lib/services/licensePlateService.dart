@@ -12,7 +12,6 @@ class LicensePlateService {
     var response;
     try {
       var baseurl = dotenv.env["API_URL"];
-      print(baseurl);
       var httpRequest = new HttpRequest();
 
       response = await httpRequest.get('${baseurl}licensePlates');
@@ -28,7 +27,6 @@ class LicensePlateService {
     var response;
     try {
       var baseurl = dotenv.env["API_URL"];
-      print(baseurl);
       var httpRequest = new HttpRequest();
 
       response =
@@ -45,7 +43,6 @@ class LicensePlateService {
     var response;
     try {
       var baseurl = dotenv.env["API_URL"];
-      print(baseurl);
       var httpRequest = new HttpRequest();
 
       response =

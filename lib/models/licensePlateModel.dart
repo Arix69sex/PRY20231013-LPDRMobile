@@ -6,10 +6,11 @@ class LicensePlate {
   final double longitude;
   final double latitude;
   final Uint8List imageUrl;
-  final bool hasInfractions;
-  final bool takenActions;
+  bool hasInfractions;
+  bool takenActions;
+  DateTime? createdAt;
   final int userId;
-  
+
   LicensePlate(
       {required this.id,
       required this.code,
@@ -18,5 +19,6 @@ class LicensePlate {
       required this.imageUrl,
       required this.hasInfractions,
       required this.takenActions,
+      this.createdAt,
       required this.userId});
 }
