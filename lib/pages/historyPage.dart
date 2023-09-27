@@ -139,7 +139,7 @@ class _HistoryPageState extends State<HistoryPage> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: TopBar(
-          title: 'History',
+          title: 'Historial',
           onMenuPressed: openDrawer,
         ),
       ),
@@ -160,8 +160,8 @@ class _HistoryPageState extends State<HistoryPage> {
                     onChanged:
                         _filterItems, // Trigger filtering when text changes
                     decoration: InputDecoration(
-                      labelText: 'Search',
-                      hintText: 'Search items by code...',
+                      labelText: 'Buscar',
+                      hintText: 'Buscar items por código...',
                       prefixIcon: Icon(Icons.search),
                       border: OutlineInputBorder(
                         borderSide: BorderSide.none, // Remove the border
@@ -180,6 +180,44 @@ class _HistoryPageState extends State<HistoryPage> {
             ),
           ),
 
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 8.0,
+              horizontal: 15.0,
+            ),
+            child: Container(
+              padding: EdgeInsets.all(16.0),
+              color: Colors.blueAccent, // Change the color as needed
+              child: Row(
+                children: <Widget>[
+                  SizedBox(width: 25.0),
+                  Text(
+                    'Imágen',
+                    style: TextStyle(
+                        fontSize: 14.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(width: 60.0),
+                  Text(
+                    'Código',
+                    style: TextStyle(
+                        fontSize: 14.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(width: 40.0),
+                  Text(
+                    'Tomó acciones?',
+                    style: TextStyle(
+                        fontSize: 14.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
           // List of Items
           Expanded(
             child: ListView.builder(

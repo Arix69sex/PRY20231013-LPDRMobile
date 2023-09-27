@@ -59,7 +59,8 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
     final Uint8List imageBytes = await licensePlateService
         .getImageOfLicensePlate(decodedlicensePlateResponse["id"]);
     setState(() {
-      var responseDateTime =  DateTime.parse(decodedlicensePlateResponse['createdAt']);
+      var responseDateTime =
+          DateTime.parse(decodedlicensePlateResponse['createdAt']);
       licensePlate = LicensePlate(
           id: decodedlicensePlateResponse["id"],
           code: decodedlicensePlateResponse["code"],
@@ -104,7 +105,7 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: TopBar(
-          title: 'License Plate Details',
+          title: 'Detalles de Placa',
           onMenuPressed: openDrawer,
         ),
       ),
@@ -121,7 +122,7 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
                 Image.memory(
                   licensePlate.imageUrl,
                   fit: BoxFit.cover,
-                  width: 250,
+                  width: 200,
                 ),
                 SizedBox(height: 16.0),
                 Text(
@@ -138,16 +139,20 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
             child: ListView(
               padding: EdgeInsets.all(16.0),
               children: <Widget>[
-                _buildAttributeItem(Icons.location_on, 'Latitude',
+                _buildAttributeItem(Icons.location_on, 'Latitud',
                     licensePlate.latitude.toStringAsFixed(2).toString()),
-                _buildAttributeItem(Icons.location_on, 'Longitude',
+                _buildAttributeItem(Icons.location_on, 'Logintud',
                     licensePlate.longitude.toStringAsFixed(2).toString()),
-                _buildAttributeItem(Icons.today, 'Detected at',
-                    licensePlate.createdAt != null ? licensePlate.createdAt!.toLocal().toString() : ""),
-                _buildAttributeItem(Icons.warning, 'Infractions Number',
+                _buildAttributeItem(
+                    Icons.today,
+                    'Detectado el',
+                    licensePlate.createdAt != null
+                        ? licensePlate.createdAt!.toLocal().toString()
+                        : ""),
+                _buildAttributeItem(Icons.warning, 'Número de Infracciones',
                     infractionsNumber.toString()),
-                _buildAttributeItem(Icons.done, 'Taken Actions',
-                    licensePlate.takenActions ? 'Yes' : 'No'),
+                _buildAttributeItem(Icons.done, 'Se tomaron acciones? ',
+                    licensePlate.takenActions ? 'Sí' : 'No'),
               ],
             ),
           ),
@@ -188,10 +193,10 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
                                     licensePlateId: widget.id)));
                       } else {
                         MessageSnackBar.showMessage(
-                            context, "Infractions not found.");
+                            context, "Infracciones no encontradas.");
                       }
                     },
-                    child: Text('Infractions'),
+                    child: Text('Infracciones'),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.lightBlue,
                         foregroundColor: Colors.white,

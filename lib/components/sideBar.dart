@@ -34,7 +34,7 @@ class Sidebar extends StatelessWidget {
               children: <Widget>[
                 ListTile(
                   leading: Icon(Icons.camera),
-                  title: Text('Camera'),
+                  title: Text('Cámara'),
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => HomePage()));
@@ -42,7 +42,7 @@ class Sidebar extends StatelessWidget {
                 ),
                 ListTile(
                   leading: Icon(Icons.person),
-                  title: Text('Profile'),
+                  title: Text('Perfil'),
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => ProfilePage()));
@@ -50,7 +50,7 @@ class Sidebar extends StatelessWidget {
                 ),
                 ListTile(
                   leading: Icon(Icons.history),
-                  title: Text('History'),
+                  title: Text('Historial'),
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => HistoryPage()));

@@ -15,7 +15,8 @@ class ItemRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        Icon(icon, size: 32, color: Colors.grey.shade800), // Name icon
+        Icon(icon,
+            size: 32, color: Color.fromARGB(255, 50, 132, 187)), // Name icon
         const SizedBox(width: 12),
         Expanded(
           child: Text(

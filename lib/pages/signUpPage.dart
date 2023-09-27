@@ -71,7 +71,7 @@ class _SignupPageState extends State<SignupPage> {
                     height: 16.0), // Add some space between the fields
                 TextFormField(
                   decoration: InputDecoration(
-                    labelText: 'Password',
+                    labelText: 'Contraseña',
                     border: OutlineInputBorder(),
                   ),
                   controller: passwordController,
@@ -95,16 +95,16 @@ class _SignupPageState extends State<SignupPage> {
                       ));
                     } else {
                       MessageSnackBar.showMessage(
-                          context, "User already exists");
+                          context, "Usuario ya existe.");
                     }
                     // Navigate to the sign-up pag
                   },
-                  child: Text('Sign up'),
+                  child: Text('Crear cuenta'),
                 ),
                 SizedBox(height: 8.0), // Add some space below the login button
                 GestureDetector(
                   child: Text(
-                    'Already have an account?',
+                    'Ya tienes una cuenta?',
                     style: TextStyle(
                       color: Colors.blue,
                     ),
