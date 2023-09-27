@@ -26,7 +26,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: TopBar(
-          title: 'Profile',
+          title: 'Perfil',
           onMenuPressed: openDrawer,
         ),
       ),
@@ -111,7 +111,7 @@ class _UserProfileViewState extends State<UserProfileView> {
             height: 150.0,
             child: Center(
               child: Text(
-                'Your Profile',
+                'Tu Perfil',
                 style: TextStyle(
                   fontSize: 40.0,
                   color: Colors.white,
@@ -126,12 +126,12 @@ class _UserProfileViewState extends State<UserProfileView> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 buildProfileField("Email", emailController),
-                buildProfileField("Password", passwordController),
-                buildProfileField("Identification", identificationController),
-                buildProfileField("First Name", firstNameController),
-                buildProfileField("Last Name", lastNameController),
-                buildProfileField("Address", addressController),
-                buildProfileField("Phone Number", phoneNumberController),
+                buildProfileField("Contraseña", passwordController),
+                buildProfileField("Identificación", identificationController),
+                buildProfileField("Nombres", firstNameController),
+                buildProfileField("Apellidos", lastNameController),
+                buildProfileField("Dirección", addressController),
+                buildProfileField("Teléfono", phoneNumberController),
                 SizedBox(height: 20.0),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -143,7 +143,7 @@ class _UserProfileViewState extends State<UserProfileView> {
                           children: [
                             ElevatedButton(
                               onPressed: toggleEditing,
-                              child: Text('Cancel'),
+                              child: Text('Cancelar'),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.grey,
                                 foregroundColor: Colors.white,
@@ -176,19 +176,19 @@ class _UserProfileViewState extends State<UserProfileView> {
                                         phoneNumber);
                                 if (response!.statusCode == 200) {
                                   MessageSnackBar.showMessage(
-                                      context, "Profile updated.");
+                                      context, "Perfil actualizado.");
                                   setState(() {
                                     isEditing = false;
                                   });
                                 } else {
                                   MessageSnackBar.showMessage(
-                                      context, "Update failed.");
+                                      context, "Actualización falló.");
                                   setState(() {
-                                    isEditing = false;
+                                    isEditing = true;
                                   });
                                 }
                               },
-                              child: Text('Save'),
+                              child: Text('Guardar'),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.lightBlue,
                                 foregroundColor: Colors.white,
@@ -203,7 +203,7 @@ class _UserProfileViewState extends State<UserProfileView> {
                         )
                       : ElevatedButton(
                           onPressed: toggleEditing,
-                          child: Text('Edit'),
+                          child: Text('Editar'),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.lightBlue,
                             foregroundColor: Colors.white,

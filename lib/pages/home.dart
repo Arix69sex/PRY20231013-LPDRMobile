@@ -147,7 +147,7 @@ class _HomePageState extends State<HomePage> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: TopBar(
-          title: 'Home',
+          title: 'Cámara',
           onMenuPressed: openDrawer,
         ),
       ),

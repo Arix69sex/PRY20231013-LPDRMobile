@@ -57,12 +57,16 @@ class _InfractionsPageState extends State<InfractionsPage> {
         json.decode(response!.body)?["infraction"];
 
     var infractionItems = decodedInfractionsResponse.map((data) {
+      var responseDateTime = DateTime.parse(data['date']);
       return Infraction(
           id: data["id"],
+          infractionCode: data["infractionCode"],
+          ballotNumber: data["ballotNumber"],
           name: data["name"],
           level: data["level"],
           fine: data["fine"],
-          licensePlateId: data["licensePlate"]);
+          licensePlateId: data["licensePlate"],
+          date: responseDateTime);
     }).toList();
 
     final Uint8List imageBytes = await licensePlateService
@@ -93,7 +97,7 @@ class _InfractionsPageState extends State<InfractionsPage> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: TopBar(
-          title: 'Infractions',
+          title: 'Infracciones',
           onMenuPressed: openDrawer,
         ),
       ),
@@ -116,7 +120,7 @@ class _InfractionsPageState extends State<InfractionsPage> {
           ),
           SizedBox(height: 30), // Adjust the spacing as needed
           Text(
-            'Infractions',
+            'Infracciones',
             style: TextStyle(fontSize: 40),
           ),
           SizedBox(height: 15), // Adjust the spacing as needed
@@ -129,7 +133,7 @@ class _InfractionsPageState extends State<InfractionsPage> {
                 return Container(
                   decoration: BoxDecoration(
                     color:
-                        Color.fromARGB(255, 241, 241, 241), // Background color
+                        Color.fromARGB(255, 253, 253, 253), // Background color
                     border: Border.all(
                       color: const Color.fromARGB(
                           255, 223, 223, 223), // Border color
@@ -143,6 +147,18 @@ class _InfractionsPageState extends State<InfractionsPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
+                        ItemRow(
+                            icon: Icons.description,
+                            text: infraction.infractionCode ?? ""),
+                        SizedBox(height: 15),
+                        ItemRow(
+                            icon: Icons.receipt_long,
+                            text: infraction.ballotNumber ?? ""),
+                        SizedBox(height: 15),
+                         ItemRow(
+                            icon: Icons.calendar_month,
+                            text: infraction.date!.toLocal().toString()),
+                        SizedBox(height: 15),
                         ItemRow(icon: Icons.description, text: infraction.name),
                         SizedBox(height: 15),
                         ItemRow(icon: Icons.warning, text: infraction.level),

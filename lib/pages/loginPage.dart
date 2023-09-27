@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 16.0), // Add some space between the fields
                 TextFormField(
                   decoration: InputDecoration(
-                    labelText: 'Password',
+                    labelText: 'Contraseña',
                     border: OutlineInputBorder(),
                   ),
                   controller: passwordController,
@@ -94,10 +94,10 @@ class _LoginPageState extends State<LoginPage> {
                       ));
                     } else {
                       MessageSnackBar.showMessage(
-                          context, "User already exists or not found");
+                          context, "Usuario no fue encontrado.");
                     }
                   },
-                  child: Text('Login'),
+                  child: Text('Ingresar'),
                 ),
                 SizedBox(height: 8.0), // Add some space below the login button
                 GestureDetector(
