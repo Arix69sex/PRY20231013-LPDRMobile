@@ -114,8 +114,8 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           // Top Part: Image and License Plate Code
-          Expanded(
-            flex: 1,
+          Container(
+            //flex: 1,
             child: Column(
               children: <Widget>[
                 SizedBox(height: 28.0),

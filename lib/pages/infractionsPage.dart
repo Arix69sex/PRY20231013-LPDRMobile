@@ -155,7 +155,7 @@ class _InfractionsPageState extends State<InfractionsPage> {
                             icon: Icons.receipt_long,
                             text: infraction.ballotNumber ?? ""),
                         SizedBox(height: 15),
-                         ItemRow(
+                        ItemRow(
                             icon: Icons.calendar_month,
                             text: infraction.date!.toLocal().toString()),
                         SizedBox(height: 15),

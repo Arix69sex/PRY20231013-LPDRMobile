@@ -84,8 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                     var authServiceInstance = AuthService();
                     var response = await authServiceInstance.login(
                         emailController.text, passwordController.text);
-                    final dynamic decodedResponse =
-                        json.decode(response!.body);
+                    final dynamic decodedResponse = json.decode(response!.body);
 
                     if (response?.statusCode != 400) {
                       await Jwt.saveToken(decodedResponse["token"]);
@@ -102,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 8.0), // Add some space below the login button
                 GestureDetector(
                   child: Text(
-                    "Don't have an account?",
+                    "No tienes una cuenta?",
                     style: TextStyle(
                       color: Colors.blue,
                     ),
