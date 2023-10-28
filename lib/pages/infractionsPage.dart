@@ -2,13 +2,18 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:lpdr_mobile/components/itemRow.dart';
-import 'package:lpdr_mobile/components/sideBar.dart';
 import 'package:lpdr_mobile/components/topbar.dart';
 import 'package:lpdr_mobile/models/infractionModel.dart';
 import 'package:lpdr_mobile/models/licensePlateModel.dart';
 import 'package:lpdr_mobile/services/infractionService.dart';
 import 'package:lpdr_mobile/services/licensePlateService.dart';
+
+final borderColor = Color.fromARGB(255, 235, 235, 235);
+final itemWidth = 360.0;
+final mainAxisAlignment = MainAxisAlignment.center;
+final borderRadius = BorderRadius.all(Radius.circular(0.0));
+final styleOfCriteria =
+    TextStyle(fontSize: 16, color: Color.fromRGBO(143, 143, 143, 1));
 
 class InfractionsPage extends StatefulWidget {
   final int licensePlateId;
@@ -36,14 +41,7 @@ class _InfractionsPageState extends State<InfractionsPage> {
       userId: 0);
 
   List<Infraction> infractions = [];
-
-  @override
-  void initState() {
-    super.initState();
-    licensePlateService = LicensePlateService();
-    infractionService = InfractionService();
-    getInfractions(widget.licensePlateId);
-  }
+  var dropdownShowList = [false, false];
 
   void getInfractions(int licensePlateId) async {
     var response = await licensePlateService
@@ -81,100 +79,160 @@ class _InfractionsPageState extends State<InfractionsPage> {
           hasInfractions: decodedlicensePlateResponse["hasInfractions"],
           takenActions: decodedlicensePlateResponse["takenActions"],
           userId: decodedlicensePlateResponse["user"]);
-
+      dropdownShowList =
+          List.generate(infractionItems.length, (index) => false);
       infractions = List.from(infractionItems);
     });
   }
 
-  void openDrawer() {
-    _scaffoldKey.currentState!.openDrawer();
+  void toggleList(index) {
+    setState(() {
+      dropdownShowList[index] = !dropdownShowList[index];
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    licensePlateService = LicensePlateService();
+    infractionService = InfractionService();
+    getInfractions(widget.licensePlateId);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: PreferredSize(
+      bottomNavigationBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: TopBar(
-          title: 'Infracciones',
-          onMenuPressed: openDrawer,
+          title: 'Cámara',
+          onMenuPressed: () => {},
         ),
       ),
-      drawer: Sidebar(),
-      body: Column(
-        children: <Widget>[
-          Container(
-            color: Colors.lightBlue,
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height * 0.2,
-            child: Center(
-              child: Text(
-                licensePlate.code,
-                style: TextStyle(
-                  fontSize: 50,
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height / 3,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/banner.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15),
+                Text(
+                  licensePlate.code ?? "",
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromRGBO(49, 49, 49, 1)),
+                  textAlign: TextAlign.left,
+                ),
+                SizedBox(height: 15),
+                Text(
+                  'Infracciones',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromRGBO(143, 143, 143, 1)),
+                  textAlign: TextAlign.left,
+                ),
+                SizedBox(height: 5),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 2 / 3,
+                  child: ListView.builder(
+                      key: listKey,
+                      itemCount: infractions.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        var infraction = infractions[index];
+                        return Column(children: [
+                          GestureDetector(
+                              onTap: () => {toggleList(index)},
+                              child: Row(
+                                  mainAxisAlignment: mainAxisAlignment,
+                                  children: [
+                                    Container(
+                                        width: itemWidth,
+                                        decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: borderColor),
+                                            borderRadius:
+                                                borderRadius // Add border here
+                                            ),
+                                        child: ListTile(
+                                          leading: Icon(
+                                            Icons.article_outlined,
+                                            size: 35,
+                                            color: Color.fromRGBO(
+                                                152, 175, 185, 1),
+                                          ),
+                                          title: Text(
+                                            infraction.infractionCode ?? "",
+                                          ),
+                                          trailing: !dropdownShowList[index]
+                                              ? Icon(Icons.expand_more)
+                                              : Icon(Icons.expand_less),
+                                        ))
+                                  ])),
+                          if (dropdownShowList[index])
+                            _buildCriteriaItem("Nombre: ", infraction.name),
+                          if (dropdownShowList[index])
+                            _buildCriteriaItem("Calificación: ", infraction.level),
+                          if (dropdownShowList[index])
+                            _buildCriteriaItem("Boleta: ", infraction.ballotNumber),
+                          if (dropdownShowList[index])
+                            _buildCriteriaItem(
+                                "Multa: ", infraction.fine.toString()),
+                          if (dropdownShowList[index])
+                            _buildCriteriaItem(
+                                "Fecha: ", infraction.date.toString()),
+                          SizedBox(height: 15)
+                        ]);
+                      }),
+                ),
+              ],
+            ),
+            /*Positioned(
+              top: 25.0, // Adjust the top position as needed
+              left: 25.0, // Adjust the right position as needed
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Icon(
+                  Icons.arrow_back,
                   color: Colors.white,
+                  size: 30,
                 ),
               ),
-            ),
-          ),
-          SizedBox(height: 30), // Adjust the spacing as needed
-          Text(
-            'Infracciones',
-            style: TextStyle(fontSize: 40),
-          ),
-          SizedBox(height: 15), // Adjust the spacing as needed
-          Expanded(
-            child: ListView.builder(
-              key: listKey,
-              itemCount: infractions.length,
-              itemBuilder: (BuildContext context, int index) {
-                var infraction = infractions[index];
-                return Container(
-                  decoration: BoxDecoration(
-                    color:
-                        Color.fromARGB(255, 253, 253, 253), // Background color
-                    border: Border.all(
-                      color: const Color.fromARGB(
-                          255, 223, 223, 223), // Border color
-                      width: 1.0, // Border width
-                    ),
-                    borderRadius: BorderRadius.circular(10.0), // Border radius
-                  ),
-                  margin: EdgeInsets.all(16),
-                  child: Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        ItemRow(
-                            icon: Icons.description,
-                            text: infraction.infractionCode ?? ""),
-                        SizedBox(height: 15),
-                        ItemRow(
-                            icon: Icons.receipt_long,
-                            text: infraction.ballotNumber ?? ""),
-                        SizedBox(height: 15),
-                         ItemRow(
-                            icon: Icons.calendar_month,
-                            text: infraction.date!.toLocal().toString()),
-                        SizedBox(height: 15),
-                        ItemRow(icon: Icons.description, text: infraction.name),
-                        SizedBox(height: 15),
-                        ItemRow(icon: Icons.warning, text: infraction.level),
-                        SizedBox(height: 15),
-                        ItemRow(
-                            icon: Icons.savings,
-                            text: "S/. ${infraction.fine}"),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
+            ),*/
+          ],
+        ),
       ),
     );
+  }
+
+  Widget _buildCriteriaItem(String? criteria, String? value) {
+    return Row(mainAxisAlignment: mainAxisAlignment, children: [
+      Container(
+          width: itemWidth,
+          decoration: BoxDecoration(
+              border: Border.all(color: borderColor),
+              borderRadius: borderRadius // Add border here
+              ),
+          child: ListTile(
+            leading: Text(
+              criteria ?? "",
+              style: styleOfCriteria,
+            ),
+            title: Text(value ?? "", style: styleOfCriteria),
+          ))
+    ]);
   }
 }

@@ -23,10 +23,10 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: PreferredSize(
+      bottomNavigationBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: TopBar(
-          title: 'Perfil',
+          title: 'Mi perfil',
           onMenuPressed: openDrawer,
         ),
       ),
@@ -47,6 +47,13 @@ class UserProfileView extends StatefulWidget {
   _UserProfileViewState createState() => _UserProfileViewState();
 }
 
+class ItemModel {
+  final IconData icon;
+  final String text;
+
+  ItemModel(this.icon, this.text);
+}
+
 class _UserProfileViewState extends State<UserProfileView> {
   int userDataId = 0;
   String email = 'example@email.com';
@@ -58,6 +65,7 @@ class _UserProfileViewState extends State<UserProfileView> {
   String phoneNumber = '+51 12345';
 
   bool isEditing = false;
+  bool isOnProfilePage = true;
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -93,9 +101,21 @@ class _UserProfileViewState extends State<UserProfileView> {
     loadUserData();
   }
 
+  final List<ItemModel> items = [
+    ItemModel(Icons.star, 'Item 1'),
+    ItemModel(Icons.favorite, 'Item 2'),
+    ItemModel(Icons.thumb_up, 'Item 3'),
+  ];
+
   void toggleEditing() {
     setState(() {
       isEditing = !isEditing;
+    });
+  }
+
+  void togglePages() {
+    setState(() {
+      isOnProfilePage = !isOnProfilePage;
     });
   }
 
@@ -104,120 +124,195 @@ class _UserProfileViewState extends State<UserProfileView> {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          Container(
-            color: Colors.lightBlue,
-            padding: EdgeInsets.all(20.0),
-            width: double.infinity,
-            height: 150.0,
-            child: Center(
-              child: Text(
-                'Tu Perfil',
-                style: TextStyle(
-                  fontSize: 40.0,
+          !isOnProfilePage
+              ? Container(
                   color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-          Container(
-            color: Colors.white,
-            padding: EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                buildProfileField("Email", emailController),
-                buildProfileField("Contraseña", passwordController),
-                buildProfileField("Identificación", identificationController),
-                buildProfileField("Nombres", firstNameController),
-                buildProfileField("Apellidos", lastNameController),
-                buildProfileField("Dirección", addressController),
-                buildProfileField("Teléfono", phoneNumberController),
-                SizedBox(height: 20.0),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 40.0,
-                  ),
-                  child: isEditing
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            ElevatedButton(
-                              onPressed: toggleEditing,
-                              child: Text('Cancelar'),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.grey,
-                                foregroundColor: Colors.white,
-                                elevation: 3,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(32.0),
-                                ),
-                                minimumSize: Size(100, 40),
-                              ),
+                  padding: EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Text("Mi Perfil",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          )),
+                      SizedBox(height: 10.0),
+                      OutlinedButton(
+                        onPressed: () async {},
+                        child: Text('Infracciones'),
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4.0),
                             ),
-                            SizedBox(width: 20.0),
-                            ElevatedButton(
-                              onPressed: () async {
-                                isEditing = false;
-                                email = emailController.text;
-                                password = passwordController.text;
-                                identification = identificationController.text;
-                                names = firstNameController.text;
-                                lastNames = lastNameController.text;
-                                address = addressController.text;
-                                phoneNumber = phoneNumberController.text;
-                                var userDataService = UserDataService();
-                                final response =
-                                    await userDataService.updateUserDataById(
-                                        userDataId,
-                                        identification,
-                                        names,
-                                        lastNames,
-                                        address,
-                                        phoneNumber);
-                                if (response!.statusCode == 200) {
-                                  MessageSnackBar.showMessage(
-                                      context, "Perfil actualizado.");
-                                  setState(() {
-                                    isEditing = false;
-                                  });
-                                } else {
-                                  MessageSnackBar.showMessage(
-                                      context, "Actualización falló.");
-                                  setState(() {
-                                    isEditing = true;
-                                  });
-                                }
-                              },
-                              child: Text('Guardar'),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.lightBlue,
-                                foregroundColor: Colors.white,
-                                elevation: 3,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(32.0),
-                                ),
-                                minimumSize: Size(100, 40),
-                              ),
-                            ),
-                          ],
-                        )
-                      : ElevatedButton(
-                          onPressed: toggleEditing,
-                          child: Text('Editar'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.lightBlue,
-                            foregroundColor: Colors.white,
-                            elevation: 3,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(32.0),
-                            ),
-                            minimumSize: Size(100, 40),
                           ),
+                          side: MaterialStateProperty.all<BorderSide>(
+                            BorderSide(
+                              color: const Color.fromRGBO(
+                                  235, 235, 235, 1), // Border color
+                              width: 2.0, // Border width
+                            ),
+                          ),
+                          foregroundColor: MaterialStateProperty.all<Color>(
+                              Colors.black), // Text color
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.white), // Button color
                         ),
-                )
-              ],
-            ),
-          ),
+                      ),
+                      OutlinedButton(
+                        onPressed: () async {},
+                        child: Text('Infracciones'),
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                          ),
+                          side: MaterialStateProperty.all<BorderSide>(
+                            BorderSide(
+                              color: const Color.fromRGBO(
+                                  235, 235, 235, 1), // Border color
+                              width: 2.0, // Border width
+                            ),
+                          ),
+                          foregroundColor: MaterialStateProperty.all<Color>(
+                              Colors.black), // Text color
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.white), // Button color
+                        ),
+                      ),
+                    ],
+                  ))
+              : Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Container(
+                        child: Row(children: [
+                          IconButton(
+                            icon: Icon(
+                              Icons.arrow_back,
+                              color: Colors.black, // Icon color
+                              size: 40.0,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          Text("Mi información",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ))
+                        ]),
+                      ),
+                      SizedBox(height: 10.0),
+                      buildProfileField("Email", emailController),
+                      buildProfileField("Contraseña", passwordController),
+                      buildProfileField(
+                          "Identificación", identificationController),
+                      buildProfileField("Nombres", firstNameController),
+                      buildProfileField("Apellidos", lastNameController),
+                      buildProfileField("Dirección", addressController),
+                      buildProfileField("Teléfono", phoneNumberController),
+                      SizedBox(height: 20.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 0.0,
+                        ),
+                        child: isEditing
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: toggleEditing,
+                                    child: Text('Cancelar'),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.grey,
+                                      foregroundColor: Colors.white,
+                                      elevation: 3,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(4.0),
+                                      ),
+                                      minimumSize: Size(160, 60),
+                                    ),
+                                  ),
+                                  SizedBox(width: 20.0),
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      isEditing = false;
+                                      email = emailController.text;
+                                      password = passwordController.text;
+                                      identification =
+                                          identificationController.text;
+                                      names = firstNameController.text;
+                                      lastNames = lastNameController.text;
+                                      address = addressController.text;
+                                      phoneNumber = phoneNumberController.text;
+                                      var userDataService = UserDataService();
+                                      final response = await userDataService
+                                          .updateUserDataById(
+                                              userDataId,
+                                              identification,
+                                              names,
+                                              lastNames,
+                                              address,
+                                              phoneNumber);
+                                      if (response!.statusCode == 200) {
+                                        MessageSnackBar.showMessage(
+                                            context, "Perfil actualizado.");
+                                        setState(() {
+                                          isEditing = false;
+                                        });
+                                      } else {
+                                        MessageSnackBar.showMessage(
+                                            context, "Actualización falló.");
+                                        setState(() {
+                                          isEditing = true;
+                                        });
+                                      }
+                                    },
+                                    child: Text('Guardar'),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          Color.fromRGBO(241, 75, 80, 1),
+                                      foregroundColor: Colors.white,
+                                      elevation: 3,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(4.0),
+                                      ),
+                                      minimumSize: Size(160, 60),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : ElevatedButton(
+                                onPressed: toggleEditing,
+                                child: Text('Editar'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      Color.fromRGBO(241, 75, 80, 1),
+                                  foregroundColor: Colors.white,
+                                  elevation: 3,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4.0),
+                                  ),
+                                  minimumSize: Size(350, 60),
+                                ),
+                              ),
+                      )
+                    ],
+                  ),
+                ),
         ],
       ),
     );
@@ -227,30 +322,32 @@ class _UserProfileViewState extends State<UserProfileView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          label,
-          style:
-              TextStyle(fontSize: 15.0, color: Color.fromARGB(201, 77, 77, 77)),
-        ),
         SizedBox(height: 12.0),
         Container(
-          height: 50.0,
+          height: 60.0,
           width: 350.0,
-          child: TextField(
+          child: TextFormField(
             controller: controller,
             enabled: isEditing ? true : false, // Set the TextField as disabled
+
             decoration: InputDecoration(
-              fillColor: Colors.grey[200],
-              hintStyle: TextStyle(color: const Color.fromARGB(46, 46, 46, 1)),
+              labelText: label,
+              labelStyle: TextStyle(
+                color: Color.fromRGBO(
+                    14, 26, 48, 1), // Change label text color here
+              ),
+              hintStyle: TextStyle(
+                  color: Color(0x49454F), fontWeight: FontWeight.bold),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
+                borderRadius: BorderRadius.circular(4.0),
                 borderSide: BorderSide(
-                    color: const Color.fromARGB(255, 51, 51, 51), width: 1.0),
+                    color: Color.fromRGBO(56, 56, 56, 1), width: 1.0),
               ),
               focusedBorder: OutlineInputBorder(
                 // Set the focused border style
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(color: Colors.blue, width: 1.0),
+                borderRadius: BorderRadius.circular(4.0),
+                borderSide: BorderSide(
+                    color: Color.fromRGBO(14, 26, 48, 1), width: 1.0),
               ),
             ),
           ),

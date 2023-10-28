@@ -92,7 +92,7 @@ class _OwnerPageState extends State<OwnerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: PreferredSize(
+      bottomNavigationBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: TopBar(
           title: 'Owner',

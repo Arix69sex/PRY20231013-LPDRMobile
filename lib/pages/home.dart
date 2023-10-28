@@ -13,6 +13,7 @@ import 'package:lpdr_mobile/util/Jwt.dart';
 import 'package:in_app_notification/in_app_notification.dart';
 import 'dart:math' as math;
 import 'package:geolocator/geolocator.dart';
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -94,12 +95,12 @@ class _HomePageState extends State<HomePage> {
     var token = await Jwt.getToken();
     var decodedToken = await Jwt.decodeToken(token!);
     Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
+        desiredAccuracy: LocationAccuracy.high);
 
     double latitude = position.latitude;
     double longitude = position.longitude;
-    final response =
-        await frameService.sendFrames(decodedToken!["id"].toString(), bytes, latitude, longitude);
+    final response = await frameService.sendFrames(
+        decodedToken!["id"].toString(), bytes, latitude, longitude);
     final Map<String, dynamic> decodedResponse = json.decode(response!.body);
 
     if (response.statusCode == 201) {
@@ -119,8 +120,7 @@ class _HomePageState extends State<HomePage> {
           },
           duration: Duration(milliseconds: _duration),
         );
-              }
-      
+      }
     }
   }
 
@@ -144,7 +144,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: PreferredSize(
+      bottomNavigationBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: TopBar(
           title: 'Cámara',
@@ -188,39 +188,24 @@ class NotificationBody extends StatelessWidget {
 
   const NotificationBody({
     Key? key,
-    this.message = "test",
+    this.message = "Infracciones Detectadas",
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final minHeight = math.min(
-      16,
-      MediaQuery.of(context).size.height,
-    );
     return ConstrainedBox(
       constraints: BoxConstraints(minHeight: 16),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                spreadRadius: 12,
-                blurRadius: 16,
-              ),
-            ],
-          ),
+        child: Container(
+          width: 150,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(16),
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color: Colors.lightBlue, // Changed to light blue
-                borderRadius: BorderRadius.circular(16.0),
-                border: Border.all(
-                  width: 1.4,
-                  color: Colors.white.withOpacity(0.2), // Changed border color
-                ),
+                color: const Color.fromRGBO(35, 34, 40, 1),
+                borderRadius: BorderRadius.circular(100.0),
+                border: Border.all(width: 1.4),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -228,7 +213,7 @@ class NotificationBody extends StatelessWidget {
                   child: Text(
                     message,
                     style: TextStyle(
-                      color: Colors.white, // Changed font color to white
+                      color: Colors.white,
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
                     ),

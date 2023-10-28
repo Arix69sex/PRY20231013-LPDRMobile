@@ -8,6 +8,7 @@ import 'package:lpdr_mobile/components/topbar.dart';
 import 'package:lpdr_mobile/models/licensePlateModel.dart';
 import 'package:lpdr_mobile/pages/infractionsPage.dart';
 import 'package:lpdr_mobile/pages/ownerPage.dart';
+import 'package:lpdr_mobile/pages/infractionsPage.dart';
 import 'package:lpdr_mobile/services/infractionService.dart';
 import 'package:lpdr_mobile/services/licensePlateService.dart';
 import 'package:lpdr_mobile/services/ownerService.dart';
@@ -37,6 +38,7 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
       takenActions: false,
       userId: 0);
   late int infractionsNumber = 0;
+  final listItemSeparation = 12.0;
   @override
   void initState() {
     super.initState();
@@ -102,7 +104,7 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: PreferredSize(
+      bottomNavigationBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: TopBar(
           title: 'Detalles de Placa',
@@ -115,19 +117,14 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
         children: <Widget>[
           // Top Part: Image and License Plate Code
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Column(
               children: <Widget>[
-                SizedBox(height: 28.0),
+                SizedBox(height: 50.0),
                 Image.memory(
                   licensePlate.imageUrl,
                   fit: BoxFit.cover,
-                  width: 200,
-                ),
-                SizedBox(height: 16.0),
-                Text(
-                  licensePlate.code,
-                  style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold),
+                  width: MediaQuery.of(context).size.width,
                 ),
               ],
             ),
@@ -137,21 +134,48 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
           Expanded(
             flex: 2,
             child: ListView(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.only(left: 16.0),
               children: <Widget>[
-                _buildAttributeItem(Icons.location_on, 'Latitud',
+                SizedBox(height: listItemSeparation),
+                Text(
+                  licensePlate.code,
+                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: listItemSeparation),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.article_outlined,
+                    ),
+                    SizedBox(width: 4.0),
+                    Text(
+                      "Información",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: listItemSeparation + 2),
+                _buildAttributeItem(Icons.location_on, 'Latitud: ',
                     licensePlate.latitude.toStringAsFixed(2).toString()),
-                _buildAttributeItem(Icons.location_on, 'Logintud',
+                SizedBox(height: listItemSeparation),
+                _buildAttributeItem(Icons.location_on, 'Logintud: ',
                     licensePlate.longitude.toStringAsFixed(2).toString()),
+                SizedBox(height: listItemSeparation),
                 _buildAttributeItem(
                     Icons.today,
-                    'Detectado el',
+                    'Detectado el: ',
                     licensePlate.createdAt != null
                         ? licensePlate.createdAt!.toLocal().toString()
                         : ""),
-                _buildAttributeItem(Icons.warning, 'Número de Infracciones',
+                SizedBox(height: listItemSeparation),
+                _buildAttributeItem(Icons.warning, 'Número de Infracciones: ',
                     infractionsNumber.toString()),
-                _buildAttributeItem(Icons.done, 'Se tomaron acciones? ',
+                SizedBox(height: listItemSeparation),
+                _buildAttributeItem(Icons.done, 'Se tomaron acciones?: ',
                     licensePlate.takenActions ? 'Sí' : 'No'),
               ],
             ),
@@ -182,6 +206,7 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
                         backgroundColor: Colors.lightBlue,
                         foregroundColor: Colors.white,
                         elevation: 2)),*/
+
                 ElevatedButton(
                     onPressed: () async {
                       var shouldRedirect = await hasInfractions();
@@ -196,11 +221,16 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
                             context, "Infracciones no encontradas.");
                       }
                     },
-                    child: Text('Infracciones'),
+                    child: Text('Ver infracciones'),
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.lightBlue,
-                        foregroundColor: Colors.white,
-                        elevation: 3)),
+                      backgroundColor: Color.fromRGBO(241, 75, 80, 1),
+                      foregroundColor: Colors.white,
+                      elevation: 3,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4.0),
+                      ),
+                      minimumSize: Size(350, 50),
+                    ))
               ],
             ),
           ),
@@ -210,10 +240,28 @@ class _LicensePlateInfoPageState extends State<LicensePlateInfoPage> {
   }
 
   Widget _buildAttributeItem(IconData icon, String title, String value) {
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(title),
-      subtitle: Text(value),
+    const fontSize = 16.0;
+    const fontColorAccent = Colors.grey;
+    const fontColor = Color.fromRGBO(143, 143, 143, 1);
+    return Row(
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            color: fontColor,
+            fontSize: fontSize,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        SizedBox(width: 2.0),
+        Text(
+          value,
+          style: TextStyle(
+            color: fontColor,
+            fontSize: fontSize,
+          ),
+        ),
+      ],
     );
   }
 }
