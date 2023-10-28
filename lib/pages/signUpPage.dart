@@ -26,26 +26,15 @@ class _SignupPageState extends State<SignupPage> {
       children: <Widget>[
         // First Half (Light Blue Screen)
         Container(
-          color: Colors.lightBlue,
-          height: MediaQuery.of(context).size.height /
-              2, // Half of the screen height
-          child: Center(
-            child: Container(
-              width:
-                  MediaQuery.of(context).size.width, // Full width of the screen
-              child: Text(
-                'Infraction Detection',
-                style: TextStyle(
-                  fontSize: 40.0, // Adjust the font size as needed
-                  color: Colors.white, // Text color
-                  fontWeight: FontWeight.bold, // FontWeight
-                ),
-                textAlign: TextAlign.center, // Center the text horizontally
-              ),
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height / 3,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/banner.png'),
+              fit: BoxFit.cover,
             ),
           ),
         ),
-
         // Second Half (Signup Inputs)
         ClipRRect(
           borderRadius: BorderRadius.only(
@@ -60,34 +49,33 @@ class _SignupPageState extends State<SignupPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
+                Text(
+                  'TeCheckeo',
+                  style: TextStyle(
+                    fontSize: 30.0, // Adjust the font size as needed
+                    color: Colors.black, // Text color
+                    fontWeight: FontWeight.bold, // FontWeight
                   ),
-                  controller: emailController,
+                  textAlign: TextAlign.left, // Center the text horizontally
                 ),
+
+                buildTextField("Email", emailController),
+
                 const SizedBox(
-                    height: 16.0), // Add some space between the fields
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Contraseña',
-                    border: OutlineInputBorder(),
-                  ),
-                  controller: passwordController,
-                  obscureText: true, // To hide the password text
-                ),
-                const SizedBox(
-                    height: 16.0), // Add some space between the fields
+                    height: 5.0), // Add some space between the fields
+
+                buildTextField("Password", passwordController),
+
+                const SizedBox(height: 16.0),
+
                 ElevatedButton(
                   onPressed: () async {
                     var authServiceInstance = new AuthService();
                     var response = await authServiceInstance.signup(
                         emailController.text, passwordController.text);
 
-                    final dynamic decodedResponse =
-                        json.decode(response!.body);
-                    
+                    final dynamic decodedResponse = json.decode(response!.body);
+
                     if (response?.statusCode != 400) {
                       await Jwt.saveToken(decodedResponse["token"]);
                       Navigator.of(context).push(MaterialPageRoute(
@@ -100,20 +88,36 @@ class _SignupPageState extends State<SignupPage> {
                     // Navigate to the sign-up pag
                   },
                   child: Text('Crear cuenta'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromRGBO(241, 75, 80, 1),
+                    foregroundColor: Colors.white,
+                    elevation: 3,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                    minimumSize: Size(350, 60),
+                  ),
                 ),
                 SizedBox(height: 8.0), // Add some space below the login button
-                GestureDetector(
-                  child: Text(
-                    'Ya tienes una cuenta?',
-                    style: TextStyle(
-                      color: Colors.blue,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      child: Text(
+                        "¿Ya tienes una cuenta?",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 66, 66, 66),
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()));
+                      },
                     ),
-                  ),
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => LoginPage()));
-                  },
-                )
+                  ],
+                ) // Add some space below the login button
               ],
             ),
           ),
@@ -121,4 +125,43 @@ class _SignupPageState extends State<SignupPage> {
       ],
     )));
   }
+}
+
+Widget buildTextField(String label, TextEditingController controller) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+      SizedBox(height: 12.0),
+      Container(
+        height: 60.0,
+        width: 360.0,
+        child: TextFormField(
+          controller: controller,
+          enabled: true, // Set the TextField as disabled
+          obscureText: label == "Password" ? true : false,
+          decoration: InputDecoration(
+            labelText: label,
+            labelStyle: TextStyle(
+              color:
+                  Color.fromRGBO(14, 26, 48, 1), // Change label text color here
+            ),
+            hintStyle:
+                TextStyle(color: Color(0x49454F), fontWeight: FontWeight.bold),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide:
+                  BorderSide(color: Color.fromRGBO(56, 56, 56, 1), width: 1.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              // Set the focused border style
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide:
+                  BorderSide(color: Color.fromRGBO(14, 26, 48, 1), width: 1.0),
+            ),
+          ),
+        ),
+      ),
+      SizedBox(height: 16.0),
+    ],
+  );
 }

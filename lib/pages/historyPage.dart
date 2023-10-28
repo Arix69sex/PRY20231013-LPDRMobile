@@ -136,7 +136,7 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: PreferredSize(
+      bottomNavigationBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: TopBar(
           title: 'Historial',
@@ -147,14 +147,34 @@ class _HistoryPageState extends State<HistoryPage> {
       body: Column(
         children: <Widget>[
           // Search Bar
+
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 35.0,
+              left: 15.0,
+            ),
+            child: Container(
+              child: Row(
+                children: [
+                  Text("Historial",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ))
+                ],
+              ),
+            ),
+          ),
+
           Container(
             margin: EdgeInsets.only(top: 10.0), // Add margin to create space
             child: Align(
               alignment: Alignment.center,
               child: Container(
-                width: 350,
+                width: 360,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: TextField(
                     controller: _searchController,
                     onChanged:
@@ -166,12 +186,13 @@ class _HistoryPageState extends State<HistoryPage> {
                       border: OutlineInputBorder(
                         borderSide: BorderSide.none, // Remove the border
                         borderRadius: BorderRadius.all(
-                            Radius.circular(10.0)), // Add border radius
+                            Radius.circular(4.0)), // Add border radius
                       ),
                       filled: true, // Fill the background
-                      fillColor: Colors.grey[200], // Set the background color
+                      fillColor: const Color.fromARGB(
+                          255, 255, 255, 255), // Set the background color
                       contentPadding: EdgeInsets.symmetric(
-                          vertical: 14.0, horizontal: 10.0), // Adjust padding
+                          vertical: 14.0), // Adjust padding
                     ),
                     style: TextStyle(fontSize: 14.0), // Make the text bigger
                   ),
@@ -187,31 +208,31 @@ class _HistoryPageState extends State<HistoryPage> {
             ),
             child: Container(
               padding: EdgeInsets.all(16.0),
-              color: Colors.blueAccent, // Change the color as needed
+              color: Color.fromRGBO(
+                  255, 255, 255, 1), // Change the color as needed
               child: Row(
                 children: <Widget>[
-                  SizedBox(width: 25.0),
                   Text(
                     'Imágen',
                     style: TextStyle(
                         fontSize: 14.0,
-                        color: Colors.white,
+                        color: Color.fromRGBO(143, 143, 143, 1),
                         fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(width: 60.0),
+                  Spacer(),
                   Text(
                     'Código',
                     style: TextStyle(
                         fontSize: 14.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
+                        color: Color.fromRGBO(143, 143, 143, 1),
+                        fontWeight: FontWeight.w900),
                   ),
-                  SizedBox(width: 40.0),
+                  Spacer(),
                   Text(
-                    'Tomó acciones?',
+                    '¿Tomó acciones?',
                     style: TextStyle(
                         fontSize: 14.0,
-                        color: Colors.white,
+                        color: Color.fromRGBO(143, 143, 143, 1),
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -232,53 +253,60 @@ class _HistoryPageState extends State<HistoryPage> {
                     horizontal: 15.0,
                   ),
                   child: Container(
-                    color: Color.fromRGBO(236, 236, 236, 1),
-                    child: ListTile(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      leading: ClipRRect(
-                        // Use ClipRRect to clip the image to a rounded rectangle
-                        borderRadius: BorderRadius.circular(
-                            8.0), // Adjust the border radius as needed
-                        child: GestureDetector(
-                          onTap: () {
-                            // Navigate to the new view here
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  // Return the widget for the new view
-                                  return LicensePlateInfoPage(id: item.id);
-                                },
-                              ),
-                            );
-                          },
+                    color: Color.fromRGBO(255, 255, 255, 1),
+                    child: Row(children: [
+                      Expanded(
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: Image.memory(
-                              item.imageUrl,
-                              width: 100.0,
-                              fit: BoxFit.cover,
+                            // Use ClipRRect to clip the image to a rounded rectangle
+                            borderRadius: BorderRadius.circular(
+                                8.0), // Adjust the border radius as needed
+                            child: GestureDetector(
+                              onTap: () {
+                                // Navigate to the new view here
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      // Return the widget for the new view
+                                      return LicensePlateInfoPage(id: item.id);
+                                    },
+                                  ),
+                                );
+                              },
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(4.0),
+                                child: Image.memory(
+                                  item.imageUrl,
+                                  width: 75.0,
+                                  height: 50.0,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      title: Text(item.code),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: !items[index].takenActions
-                                ? Icon(Icons.check)
-                                : Icon(Icons.close),
-                            onPressed: () async {
-                              await setLicensePlateTakenActions(index);
-                            },
+                          flex: 2),
+                      Expanded(
+                          child: Text(item.code, textAlign: TextAlign.center),
+                          flex: 4),
+                      Expanded(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: !items[index].takenActions
+                                    ? Icon(Icons.check)
+                                    : Icon(Icons.close),
+                                color: !items[index].takenActions
+                                    ? const Color.fromRGBO(40, 213, 133, 1)
+                                    : const Color.fromRGBO(202, 23, 23, 1),
+                                onPressed: () async {
+                                  await setLicensePlateTakenActions(index);
+                                },
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
+                          flex: 3),
+                    ]),
                   ),
                 );
               },

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:lpdr_mobile/pages/historyPage.dart';
+import 'package:lpdr_mobile/pages/home.dart';
+import 'package:lpdr_mobile/pages/profilePage.dart';
+import 'package:lpdr_mobile/pages/InfractionsPage.dart';
 
 class TopBar extends StatelessWidget {
   final String title;
   final VoidCallback onMenuPressed;
-
+  final Color accentColor = Color.fromRGBO(241, 75, 80, 1);
   TopBar({required this.title, required this.onMenuPressed});
 
   @override
@@ -23,25 +27,86 @@ class TopBar extends StatelessWidget {
         ],
       ),
       child: Row(
-        
+        mainAxisAlignment:
+            MainAxisAlignment.spaceBetween, // Ensure even spacing
         children: [
-          IconButton(
-            icon: Icon(
-              Icons.menu,
-              color: Colors.black, // Icon color
-              size: 32.0,
+          Container(
+            child: Column(
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.photo_camera_outlined,
+                    color: title == "Cámara"
+                        ? accentColor
+                        : Colors.black, // Icon color
+                    size: 40.0,
+                  ),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomePage()));
+                  },
+                ),
+                Text("Cámara",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: title == "Cámara" ? accentColor : Colors.black,
+                    ))
+              ],
             ),
-            onPressed: onMenuPressed,
           ),
-          SizedBox(width: 20),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 22, // Adjust the font size as needed
-              color: Colors.black, // Text color// FontWeight
+          Spacer(),
+          Container(
+            child: Column(
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.article_outlined,
+                    color: title == "Historial"
+                        ? accentColor
+                        : Colors.black, // Icon color
+                    size: 40.0,
+                  ),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HistoryPage()));
+                  },
+                ),
+                Text("Historial",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: title == "Historial" ? accentColor : Colors.black,
+                    ))
+              ],
             ),
           ),
-          SizedBox(width: 48.0), // Spacer for better alignment
+          Spacer(),
+          Container(
+            child: Column(
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.account_circle_outlined,
+                    color: title == "Mi perfil"
+                        ? accentColor
+                        : Colors.black, // Icon color
+                    size: 40.0,
+                  ),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => ProfilePage()));
+                  },
+                ),
+                Text("Mi perfil",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: title == "Mi perfil" ? accentColor : Colors.black,
+                    ))
+              ],
+            ),
+          ), // Spacer for better alignment
         ],
       ),
     );
