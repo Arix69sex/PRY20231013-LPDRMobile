@@ -77,6 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                     final dynamic decodedResponse = json.decode(response!.body);
 
                     if (response?.statusCode != 400) {
+                      print("toekn " + decodedResponse["token"].toString());
                       await Jwt.saveToken(decodedResponse["token"]);
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => HomePage(),
